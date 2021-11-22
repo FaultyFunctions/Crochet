@@ -54,6 +54,9 @@
 		"win": {
 			"target": "nsis",
 			"icon": "./build/icon.ico"
+		},
+		"snap": {
+			"plugs": ["default", "removable-media"]
 		}
 	}
 }
