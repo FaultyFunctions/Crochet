@@ -14,10 +14,6 @@ The 2.0 specification is currently in flux, which means that Crochet is also in 
 # Desktop App
 The latest release for Windows, Mac, & Linux can be [found here](https://github.com/FaultyFunctions/Crochet/releases/latest).
 
-# Online App
-Crochet can also be used online by visiting:<br>
-https://faultyfunctions.github.io/Crochet/
-
 # Features
 
 ### Editor
