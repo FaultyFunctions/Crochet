@@ -1,0 +1,10 @@
+@import 'tailwindcss';
+
+@plugin "daisyui" {
+	themes: all;
+}
+
+.tooltip::before,
+.tooltip::after {
+	transition-delay: 500ms;
+}
