@@ -2,7 +2,6 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
 	import { Pane, PaneGroup } from 'paneforge';
-	import { projectStore } from '$lib/stores/projectStore.svelte';
 	import NewProjectModal from '$lib/components/LandingPage/NewProjectModal.svelte';
 
 	let newProjectDialog = $state<HTMLDialogElement>();

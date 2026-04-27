@@ -1,7 +1,7 @@
 <!-- # SCRIPT # -->
 <script lang="ts">
-	import ActivitybarButton from '$lib/components/Activitybar/ActivitybarButton.svelte';
-	import NewProjectButton from '$lib/components/Activitybar/NewProjectButton.svelte';
+	import ActivityBarButton from '$lib/components/ActivityBar/ActivityBarButton.svelte';
+	import NewProjectButton from '$lib/components/ActivityBar/NewProjectButton.svelte';
 
 	let projectIcon = 'pajamas:project';
 	let searchIcon = 'pajamas:search';
@@ -15,12 +15,12 @@
 <!-- # MARKUP # -->
 <aside class="w-12 h-screen bg-base-100 flex flex-col items-center justify-between">
 	<div class="flex flex-col">
-		<ActivitybarButton
+		<ActivityBarButton
 			icon={projectIcon}
 			tooltip="Project"
 			selected={selectedSection}
 			onclick={() => (selectedSection = projectIcon)} />
-		<ActivitybarButton
+		<ActivityBarButton
 			icon={searchIcon}
 			tooltip="Search"
 			selected={selectedSection}
@@ -28,9 +28,9 @@
 	</div>
 	<div class="flex flex-col items-center">
 		<NewProjectButton />
-		<ActivitybarButton icon={openProjectIcon} tooltip="Open Project" />
-		<ActivitybarButton icon={exportIcon} tooltip="Export" />
-		<ActivitybarButton icon={settingsIcon} tooltip="Settings" />
-		<ActivitybarButton icon={infoIcon} tooltip="Help" />
+		<ActivityBarButton icon={openProjectIcon} tooltip="Open Project" />
+		<ActivityBarButton icon={exportIcon} tooltip="Export" />
+		<ActivityBarButton icon={settingsIcon} tooltip="Settings" />
+		<ActivityBarButton icon={infoIcon} tooltip="Help" />
 	</div>
 </aside>

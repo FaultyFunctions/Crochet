@@ -1,4 +1,5 @@
-use serde::Serialize;
+use serde::{Serialize, Deserialize};
+use std::path::Path;
 
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -9,23 +10,17 @@ pub struct FileNode {
     children: Option<Vec<FileNode>>
 }
 
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
+#[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct ProjectConfig {
+    name: String,
+    project_version: u32,
+    project_directory: String,
+    script_type: String,
 }
 
-#[tauri::command]
-fn open_project(app: tauri::AppHandle) -> Result<Option<String>, String> {
-    use tauri_plugin_dialog::DialogExt;
-
-    let file = app
-        .dialog()
-        .file()
-        .set_title("Select Project File")
-        .add_filter("Yarn Files", &["yarn"])
-        .blocking_pick_file();
-
-    Ok(file.map(|p| p.to_string()))
+impl ProjectConfig {
+    pub const PROJECT_VERSION: u32 = 1;
 }
 
 #[tauri::command]
@@ -42,17 +37,41 @@ fn select_directory(app: tauri::AppHandle) -> Result<Option<String>, String> {
 }
 
 #[tauri::command]
-fn read_yarn_file(path: &str) -> Result<Vec<String>, String> {
-    use std::fs::File;
-    use std::io::{BufRead, BufReader};
-    let file = File::open(path).map_err(|e| e.to_string())?;
-    let lines = BufReader::new(file)
-        .lines()
-        .collect::<Result<Vec<_>, _>>()
-        .map_err(|e| e.to_string())?;
-    Ok(lines)
+fn create_project_file(name: &str, path: &str, script_type: &str) -> Result<(), String> {
+    let project_file = Path::new(path).join(format!("{}.crochet", name));
+
+    if project_file.exists() {
+        return Err(format!("A project named '{}', already exists in that directory.", name));
+    }
+
+    let config = ProjectConfig {
+        name: name.to_string(),
+        project_version: ProjectConfig::PROJECT_VERSION,
+        project_directory: path.to_string(),
+        script_type: script_type.to_string()
+    };
+
+    let content = serde_json::to_string_pretty(&config).map_err(|e| e.to_string())?;
+
+    std::fs::write(project_file, content).map_err(|e| e.to_string())?;
+    Ok(())
 }
 
+#[tauri::command]
+fn open_project(app: tauri::AppHandle) -> Result<Option<String>, String> {
+    use tauri_plugin_dialog::DialogExt;
+
+    let file = app
+        .dialog()
+        .file()
+        .set_title("Open Project File")
+        .add_filter("Crochet Project", &["crochet"])
+        .blocking_pick_file();
+
+    Ok(file.map(|p| p.to_string()))
+}
+
+// Provides directories and files from the given path
 #[tauri::command]
 fn read_directory(path: &str) -> Result<Vec<FileNode>, String> {
     use std::fs;
@@ -77,13 +96,25 @@ fn read_directory(path: &str) -> Result<Vec<FileNode>, String> {
     Ok(entries)
 }
 
+#[tauri::command]
+fn read_yarn_file(path: &str) -> Result<Vec<String>, String> {
+    use std::fs::File;
+    use std::io::{BufRead, BufReader};
+    let file = File::open(path).map_err(|e| e.to_string())?;
+    let lines = BufReader::new(file)
+        .lines()
+        .collect::<Result<Vec<_>, _>>()
+        .map_err(|e| e.to_string())?;
+    Ok(lines)
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![greet, read_yarn_file, select_directory, open_project, read_directory])
+        .invoke_handler(tauri::generate_handler![read_yarn_file, select_directory, create_project_file, open_project, read_directory])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

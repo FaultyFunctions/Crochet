@@ -1,17 +1,18 @@
 <!-- # SCRIPT # -->
 <script lang="ts">
-	import Activitybar from '$lib/components/Activitybar/Activitybar.svelte';
+	import ActivityBar from '$lib/components/ActivityBar/ActivityBar.svelte';
 	import Sidebar from '$lib/components/Sidebar/Sidebar.svelte';
 	import Workspace from '$lib/components/Workspace/Workspace.svelte';
 	import LandingPage from '$lib/components/LandingPage/LandingPage.svelte';
 	import { projectStore } from '$lib/stores/projectStore.svelte';
 	import { PaneGroup, Pane, PaneResizer } from 'paneforge';
+	import Toast from '$lib/components/Toast/Toast.svelte';
 </script>
 
 <!-- # MARKUP # -->
 {#if projectStore.projectPath}
 	<PaneGroup direction="horizontal">
-		<Activitybar />
+		<ActivityBar />
 		<Pane defaultSize={40}>
 			<Sidebar />
 		</Pane>
@@ -25,6 +26,7 @@
 			<Workspace />
 		</Pane>
 	</PaneGroup>
+	<Toast />
 {:else}
 	<LandingPage />
 {/if}

@@ -5,10 +5,15 @@ let projectPath = $state<string | null>(null);
 let fileTree = $state<FileNode[]>([]);
 let loading = $state(false);
 let error = $state<string | null>(null);
-let folderName = $derived(projectPath ? projectPath.split(/[\\/]/).at(-1) ?? null : null)
+let directoryName = $derived(projectPath ? projectPath.split(/[\\/]/).at(-1) ?? null : null)
 
 async function selectDirectory(): Promise<string | null> {
     return await invoke<string | null>('select_directory');
+}
+
+async function loadProject(path: string): Promise<void> {
+    projectPath = path;
+    fileTree = await invoke<FileNode[]>('read_directory', { path });
 }
 
 async function openProject(): Promise<void> {
@@ -40,9 +45,11 @@ async function expandNode(node: FileNode): Promise<void> {
 export const projectStore = {
     get projectPath() { return projectPath; },
     get fileTree() { return fileTree; },
-    get folderName() { return folderName; },
+    get directoryName() { return directoryName; },
     // get loading() { return loading; },
     // get error() { return error; },
-	openFolder: openProject,
+	openProject,
+    selectDirectory,
+    loadProject,
     expandNode
 };

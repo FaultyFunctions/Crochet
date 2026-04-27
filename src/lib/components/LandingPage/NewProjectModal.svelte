@@ -2,6 +2,9 @@
 <script lang="ts">
 	import { projectStore } from '$lib/stores/projectStore.svelte';
 	import { checkProjectNameError } from '$lib/utils/validation';
+	import { invoke } from '@tauri-apps/api/core';
+	import { addToast } from '$lib/stores/toastStore.svelte';
+	import Toast from '$lib/components/Toast/Toast.svelte';
 
 	type Props = {
 		dialog?: HTMLDialogElement;
@@ -16,17 +19,32 @@
 
 	// Validation
 	let projectNameError = $derived(checkProjectNameError(projectName));
-	let canCreate = $derived(projectNameError === null && projectName.trim().length > 0 && scriptingLanguage !== null);
+	let canCreate = $derived(
+		projectNameError === null &&
+			projectName.trim().length > 0 &&
+			scriptingLanguage !== null &&
+			selectedDirectory != null
+	);
 
 	async function selectDirectory() {
-		await projectStore.openFolder();
-		selectedDirectory = projectStore.projectPath;
+		selectedDirectory = await projectStore.selectDirectory();
 	}
 
 	async function handleCreate(e: SubmitEvent) {
 		e.preventDefault();
 
-		dialog?.close();
+		try {
+			await invoke('create_project_file', {
+				name: projectName.trim(),
+				path: selectedDirectory,
+				scriptType: scriptingLanguage
+			});
+			projectStore.loadProject(selectedDirectory!);
+			dialog?.close();
+		} catch (e) {
+			addToast(String(e), 'error');
+			console.error(e);
+		}
 	}
 
 	function resetForm() {
@@ -63,7 +81,7 @@
 							type="text"
 							class="input flex-1 join-item border-r-0 cursor-default bg-base-300"
 							placeholder="No directory selected..."
-							value={selectedDirectory ?? ''}
+							bind:value={selectedDirectory}
 							required
 							disabled />
 						<button type="button" class="btn btn-soft join-item" onclick={selectDirectory}>Browse</button>
@@ -88,4 +106,5 @@
 			</div>
 		</form>
 	</div>
+	<Toast />
 </dialog>
