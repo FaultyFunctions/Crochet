@@ -1,5 +1,8 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Community Discussions
-    url: https://github.com/yourorg/yourrepo/discussions
-    about: Questions, feedback, and informal reports go here
+  - name: Report a Bug
+    url: https://github.com/FaultyFunctions/Crochet/discussions/categories/bug-reports
+  - name: Request a Feature
+    url: https://github.com/FaultyFunctions/Crochet/discussions/categories/feature-requests
+  - name: Ask a Question
+    url: https://github.com/FaultyFunctions/Crochet/discussions/categories/questions
