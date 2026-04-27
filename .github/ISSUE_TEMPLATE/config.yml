@@ -2,7 +2,10 @@ blank_issues_enabled: false
 contact_links:
   - name: Report a Bug
     url: https://github.com/FaultyFunctions/Crochet/discussions/categories/bug-reports
+    about: Found something broken? Start a report here and a maintainer will convert it to an issue.
   - name: Request a Feature
     url: https://github.com/FaultyFunctions/Crochet/discussions/categories/feature-requests
+    about: Have an idea for Crochet? Share it here and let the community discuss.
   - name: Ask a Question
     url: https://github.com/FaultyFunctions/Crochet/discussions/categories/questions
+    about: Need help with Crochet? Ask here and get answers from the community or maintainers.
