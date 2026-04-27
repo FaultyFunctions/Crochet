@@ -1,5 +1,6 @@
 <!-- # SCRIPT # -->
 <script lang="ts">
+	import WorkspaceTabHolder from '$lib/components/Workspace/WorkspaceTabHolder.svelte';
 	import Icon from '@iconify/svelte';
 	import {
 		SvelteFlow,
@@ -64,33 +65,38 @@
 </script>
 
 <!-- # MARKUP # -->
-<SvelteFlow bind:nodes bind:edges {...svelteFlowConfig}>
-	<Background bgColor="var(--color-base-100)" />
-	<MiniMap {...miniMapProps} />
-	<Controls {...sortControlProps}>
-		<ControlButton title="Align Left" aria-label="Align Left">
-			<Icon icon="ri:align-item-left-fill" />
-		</ControlButton>
-		<ControlButton title="Align Right" aria-label="Align Right">
-			<Icon icon="ri:align-item-right-fill" />
-		</ControlButton>
-		<ControlButton title="Align Top" aria-label="Align Top">
-			<Icon icon="ri:align-item-top-fill" />
-		</ControlButton>
-		<ControlButton title="Align Bottom" aria-label="Align Bottom">
-			<Icon icon="ri:align-item-bottom-fill" />
-		</ControlButton>
-	</Controls>
-	<Controls {...zoomControlProps}>
-		<ControlButton title="Zoom In" aria-label="Zoom In">
-			<Icon icon="ri:zoom-in-line" />
-		</ControlButton>
-		<ControlButton title="Zoom Out" aria-label="Zoom Out">
-			<Icon icon="ri:zoom-out-line" />
-		</ControlButton>
-	</Controls>
-	<Controls {...defaultControlProps} />
-</SvelteFlow>
+<div class="flex flex-col h-full">
+	<WorkspaceTabHolder />
+	<div class="flex-1">
+		<SvelteFlow bind:nodes bind:edges {...svelteFlowConfig}>
+			<Background bgColor="var(--color-base-100)" />
+			<MiniMap {...miniMapProps} />
+			<Controls {...sortControlProps}>
+				<ControlButton title="Align Left" aria-label="Align Left">
+					<Icon icon="ri:align-item-left-fill" />
+				</ControlButton>
+				<ControlButton title="Align Right" aria-label="Align Right">
+					<Icon icon="ri:align-item-right-fill" />
+				</ControlButton>
+				<ControlButton title="Align Top" aria-label="Align Top">
+					<Icon icon="ri:align-item-top-fill" />
+				</ControlButton>
+				<ControlButton title="Align Bottom" aria-label="Align Bottom">
+					<Icon icon="ri:align-item-bottom-fill" />
+				</ControlButton>
+			</Controls>
+			<Controls {...zoomControlProps}>
+				<ControlButton title="Zoom In" aria-label="Zoom In">
+					<Icon icon="ri:zoom-in-line" />
+				</ControlButton>
+				<ControlButton title="Zoom Out" aria-label="Zoom Out">
+					<Icon icon="ri:zoom-out-line" />
+				</ControlButton>
+			</Controls>
+			<Controls {...defaultControlProps} />
+		</SvelteFlow>
+	</div>
+</div>
 
 <!-- # STYLE # -->
 <style>
