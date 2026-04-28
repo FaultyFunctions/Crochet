@@ -5,4 +5,6 @@
 </script>
 
 <!-- # MARKUP # -->
-{@render children()}
+<div class="h-screen">
+	{@render children()}
+</div>

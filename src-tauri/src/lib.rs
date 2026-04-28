@@ -79,13 +79,25 @@ fn read_directory(path: &str) -> Result<Vec<FileNode>, String> {
     let mut entries: Vec<FileNode> = fs::read_dir(path)
         .map_err(|e| e.to_string())?
         .filter_map(|e| e.ok())
-        .map(|entry| {
-            let meta = entry.metadata().map_err(|e| e.to_string())?;
+        .filter_map(|entry| {
+            let meta = entry.metadata().ok()?;
             let is_dir = meta.is_dir();
             let entry_path = entry.path().to_string_lossy().to_string();
             let name = entry.file_name().to_string_lossy().to_string();
-            let children = if is_dir { Some(vec![]) } else { None };
-            Ok(FileNode { name, path: entry_path, is_dir, children })
+
+            // Only add .yarn files
+            if !is_dir && !name.ends_with(".yarn") {
+                return None;
+            }
+
+            // Recursively read children if it's a directory
+            let children = if is_dir {
+                Some(read_directory(&entry_path).unwrap_or_default())
+            } else {
+                None
+            };
+
+            Some(Ok(FileNode { name, path: entry_path, is_dir, children }))
         })
         .collect::<Result<Vec<_>, String>>()?;
 
@@ -94,6 +106,22 @@ fn read_directory(path: &str) -> Result<Vec<FileNode>, String> {
     });
 
     Ok(entries)
+}
+
+// Update files on move
+#[tauri::command]
+fn move_path(source: &str, destination: &str) -> Result<(), String> {
+    use std::path::Path;
+
+    let source_path = Path::new(source);
+    let file_name = source_path.file_name().ok_or("Invalid source path")?;
+    let dest_path = Path::new(destination).join(file_name);
+
+    if dest_path.exists() {
+        return Err(format!("'{}' already exists in the destination.", file_name.to_string_lossy()));
+    }
+
+    std::fs::rename(source, dest_path).map_err(|e| e.to_string())
 }
 
 #[tauri::command]
@@ -114,7 +142,14 @@ pub fn run() {
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![read_yarn_file, select_directory, create_project_file, open_project, read_directory])
+        .invoke_handler(tauri::generate_handler![
+            read_yarn_file,
+            select_directory,
+            create_project_file,
+            open_project,
+            read_directory,
+            move_path
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

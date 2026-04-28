@@ -11,9 +11,9 @@
 
 <!-- # MARKUP # -->
 {#if projectStore.projectPath}
-	<PaneGroup direction="horizontal">
+	<PaneGroup direction="horizontal" class="h-full">
 		<ActivityBar />
-		<Pane defaultSize={40}>
+		<Pane defaultSize={40} class="h-full">
 			<Sidebar />
 		</Pane>
 		<PaneResizer class="relative w-0 overflow-visible group">
