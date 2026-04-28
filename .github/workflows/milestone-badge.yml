@@ -1,0 +1,63 @@
+name: Milestone Badge
+
+on:
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+
+      - name: Fetch milestones
+        run: |
+          curl -s https://api.github.com/repos/${{ github.repository }}/milestones > milestones.json
+
+      - name: Calculate progress
+        run: |
+          MILESTONE="Crochet 1.0.0"
+
+          CLOSED=$(jq ".[] | select(.title == \"$MILESTONE\") | .closed_issues" milestones.json)
+          OPEN=$(jq ".[] | select(.title == \"$MILESTONE\") | .open_issues" milestones.json)
+
+          TOTAL=$((CLOSED + OPEN))
+
+          if [ "$TOTAL" -eq 0 ]; then
+            PERCENT=0
+          else
+            PERCENT=$((100 * CLOSED / TOTAL))
+          fi
+
+          COLOR="red"
+          if [ "$PERCENT" -ge 75 ]; then COLOR="green";
+          elif [ "$PERCENT" -ge 40 ]; then COLOR="yellow";
+          fi
+
+          mkdir out
+
+          cat <<EOF > out/milestone.json
+          {
+            "schemaVersion": 1,
+            "label": "$MILESTONE",
+            "message": "$PERCENT%",
+            "color": "$COLOR"
+          }
+          EOF
+
+      - name: Push to docs branch
+        run: |
+          git clone --depth=1 --branch docs https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} docs-branch
+
+          cp out/milestone.json docs-branch/
+
+          cd docs-branch
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+
+          git add milestone.json
+          git commit -m "Update milestone badge" || exit 0
+          git push
