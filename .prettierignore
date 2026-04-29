@@ -5,5 +5,30 @@ yarn.lock
 bun.lock
 bun.lockb
 
-# Miscellaneous
-/static/
+# Dependencies
+node_modules/
+
+# SvelteKit build output
+.svelte-kit/
+build/
+dist/
+out/
+
+# Tauri (Rust build artifacts)
+src-tauri/target/
+src-tauri/gen/
+
+# Vite cache
+.vite/
+
+# Environment files
+.env
+.env.*
+*.local
+
+# Misc OS files
+.DS_Store
+Thumbs.db
+
+# Static assets (if you truly don’t want formatting)
+static/

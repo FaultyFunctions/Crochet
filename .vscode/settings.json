@@ -1,16 +1,25 @@
 {
 	"svelte.enable-ts-plugin": true,
-	"editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
-	"editor.formatOnType": false, // required
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.formatOnType": true, // required
 	"editor.formatOnPaste": true, // optional
 	"editor.formatOnSave": true, // optional
 	"editor.formatOnSaveMode": "file", // required to format on save
 	"files.autoSave": "onFocusChange", // optional but recommended
-	"vs-code-prettier-eslint.prettierLast": false, // set as "true" to run 'prettier' last not first
 	"editor.bracketPairColorization.enabled": true,
 	"editor.guides.bracketPairs": "active",
 	"css.lint.unknownAtRules": "ignore",
 	"[svelte]": {
-		"editor.defaultFormatter": "svelte.svelte-vscode"
-	}
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"eslint.validate": [
+		"javascript",
+		"javascriptreact",
+		"typescript",
+		"svelte"
+	],
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": "explicit"
+	},
+	"eslint.useFlatConfig": true
 }

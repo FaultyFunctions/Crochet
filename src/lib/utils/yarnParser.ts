@@ -1,6 +1,8 @@
-import type {Node, Edge} from '@xyflow/svelte';
+import type { Node, Edge } from '@xyflow/svelte';
 
-export function parseYarn(lines: string[]): { nodes: Node[], edges: Edge[] } {
+// TODO: Implement Yarn Parser
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function parseYarn(lines: string[]): { nodes: Node[]; edges: Edge[] } {
 	// Parsing stuff
 	return { nodes: [], edges: [] };
 }

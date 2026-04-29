@@ -1,7 +1,6 @@
 <!-- # SCRIPT # -->
 <script lang="ts">
 	import Icon from '@iconify/svelte';
-	import type { MouseEventHandler } from 'svelte/elements';
 
 	type Props = { icon: string; tooltip: string; selected?: string; onclick?: () => void };
 	let { icon, tooltip, selected, onclick }: Props = $props();

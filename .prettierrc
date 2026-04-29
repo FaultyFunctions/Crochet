@@ -5,9 +5,8 @@
 	"printWidth": 120,
 	"jsxSingleQuote": true,
 	"bracketSameLine": true,
-	"plugins": [
-		"prettier-plugin-svelte"
-	],
+	"plugins": ["prettier-plugin-svelte"],
+	"svelteSortOrder": "options-scripts-markup-styles",
 	"overrides": [
 		{
 			"files": "*.svelte",

@@ -7,7 +7,7 @@
 <!-- # MARKUP # -->
 <button
 	class="h-12 w-12 flex items-center justify-center text-primary/50 hover:text-base-content tooltip tooltip-right hover:cursor-pointer"
-	data-tip={'New Project'}
+	data-tip="New Project"
 	onclick={() => {
 		projectStore.openProject();
 	}}>
