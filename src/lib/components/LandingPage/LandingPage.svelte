@@ -33,7 +33,7 @@
 										<button class="btn btn-block btn-primary" onclick={() => newProjectDialog?.showModal()}>
 											<Icon icon="pajamas:issue-new" class="text-base"></Icon>New Project
 										</button>
-										<button class="btn btn-block btn-accent" onclick={project.openProject}>
+										<button class="btn btn-block btn-accent" onclick={project.openProjectFile}>
 											<Icon icon="pajamas:folder-open" class="text-base"></Icon>Open Project
 										</button>
 									</div>

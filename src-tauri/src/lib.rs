@@ -1,4 +1,5 @@
-use serde::{Serialize, Deserialize};
+use serde::{Serialize};
+use tauri::Manager;
 use std::path::Path;
 
 #[derive(Serialize)]
@@ -10,17 +11,24 @@ pub struct FileNode {
     children: Option<Vec<FileNode>>
 }
 
+fn main_window(app: &tauri::AppHandle) -> tauri::WebviewWindow {
+    app.get_webview_window("main").unwrap()
+}
+
 #[tauri::command]
-fn pick_directory(app: tauri::AppHandle) -> Result<Option<String>, String> {
+async fn pick_directory(app: tauri::AppHandle) -> Option<String> {
     use tauri_plugin_dialog::DialogExt;
 
-    let folder = app
-        .dialog()
+    let window = main_window(&app);
+    let (tx, rx) = std::sync::mpsc::channel();
+
+    app.dialog()
         .file()
         .set_title("Select Folder")
-        .blocking_pick_folder();
+        .set_parent(&window)
+        .pick_folder(move |folder| tx.send(folder).unwrap());
 
-    Ok(folder.map(|p| p.to_string()))
+    rx.recv().unwrap().map(|p| p.to_string())
 }
 
 #[tauri::command]
@@ -63,17 +71,31 @@ fn get_sorted_directory_contents(path: &str) -> Result<Vec<FileNode>, String> {
 }
 
 #[tauri::command]
-fn open_project(app: tauri::AppHandle) -> Result<Option<String>, String> {
+async fn open_project_file(app: tauri::AppHandle) -> Result<Option<String>, String> {
     use tauri_plugin_dialog::DialogExt;
 
-    let file = app
-        .dialog()
+    let window = main_window(&app);
+    let (tx, rx) = std::sync::mpsc::channel();
+    
+    app.dialog()
         .file()
         .set_title("Open Project File")
         .add_filter("Crochet Project", &["crochet"])
-        .blocking_pick_file();
-
-    Ok(file.map(|p| p.to_string()))
+        .set_parent(&window)
+        .pick_file(move |file| {
+            tx.send(file).unwrap();
+        });
+    
+    let file = rx.recv().unwrap();
+    
+    match file {
+        None => Ok(None),
+        Some(path) => {
+            let contents = std::fs::read_to_string(path.to_string())
+                .map_err(|e| e.to_string())?;
+            Ok(Some(contents))
+        }
+    }
 }
 
 // Update files on move
@@ -114,7 +136,7 @@ pub fn run() {
             read_yarn_file,
             pick_directory,
             create_project_file,
-            open_project,
+            open_project_file,
             get_sorted_directory_contents,
             move_path
         ])

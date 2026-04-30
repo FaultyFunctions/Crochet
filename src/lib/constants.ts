@@ -1,1 +1,1 @@
-export const CURRENT_PROJECT_VERSION = 1;
+export const PROJECT_FILE_VERSION = 1;

@@ -10,9 +10,15 @@
 	"editor.guides.bracketPairs": "active",
 	"css.lint.unknownAtRules": "ignore",
 	"[svelte]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"typescript.validate.enable": false
 	},
-	"eslint.validate": ["javascript", "javascriptreact", "typescript", "svelte"],
+	"eslint.validate": [
+		"javascript",
+		"javascriptreact",
+		"typescript",
+		"svelte"
+	],
 	"editor.codeActionsOnSave": {
 		"source.fixAll.eslint": "explicit"
 	},
