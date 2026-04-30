@@ -4,7 +4,9 @@
 	"trailingComma": "none",
 	"printWidth": 120,
 	"jsxSingleQuote": true,
+	"htmlWhitespaceSensitivity": "ignore",
 	"bracketSameLine": true,
+	"jsxBracketSameLine": true,
 	"plugins": ["prettier-plugin-svelte"],
 	"svelteSortOrder": "options-scripts-markup-styles",
 	"overrides": [

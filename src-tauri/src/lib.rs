@@ -10,21 +10,8 @@ pub struct FileNode {
     children: Option<Vec<FileNode>>
 }
 
-#[derive(Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-struct ProjectConfig {
-    name: String,
-    project_version: u32,
-    project_directory: String,
-    script_type: String,
-}
-
-impl ProjectConfig {
-    pub const PROJECT_VERSION: u32 = 1;
-}
-
 #[tauri::command]
-fn select_directory(app: tauri::AppHandle) -> Result<Option<String>, String> {
+fn pick_directory(app: tauri::AppHandle) -> Result<Option<String>, String> {
     use tauri_plugin_dialog::DialogExt;
 
     let folder = app
@@ -37,24 +24,42 @@ fn select_directory(app: tauri::AppHandle) -> Result<Option<String>, String> {
 }
 
 #[tauri::command]
-fn create_project_file(name: &str, path: &str, script_type: &str) -> Result<(), String> {
+fn create_project_file(name: &str, path: &str, config: serde_json::Value) -> Result<(), String> {
     let project_file = Path::new(path).join(format!("{}.crochet", name));
 
     if project_file.exists() {
         return Err(format!("A project named '{}', already exists in that directory.", name));
     }
 
-    let config = ProjectConfig {
-        name: name.to_string(),
-        project_version: ProjectConfig::PROJECT_VERSION,
-        project_directory: path.to_string(),
-        script_type: script_type.to_string()
-    };
-
     let content = serde_json::to_string_pretty(&config).map_err(|e| e.to_string())?;
 
     std::fs::write(project_file, content).map_err(|e| e.to_string())?;
     Ok(())
+}
+
+// Provides top-level directories and files from the given path
+#[tauri::command]
+fn get_sorted_directory_contents(path: &str) -> Result<Vec<FileNode>, String> {
+    use std::fs;
+
+    let mut entries: Vec<FileNode> = fs::read_dir(path)
+        .map_err(|e| e.to_string())?
+        .filter_map(|e| e.ok())
+        .map(|entry| {
+            let meta = entry.metadata().map_err(|e| e.to_string())?;
+            let is_dir = meta.is_dir();
+            let entry_path = entry.path().to_string_lossy().to_string();
+            let name = entry.file_name().to_string_lossy().to_string();
+            let children = if is_dir { Some(vec![]) } else { None };
+            Ok(FileNode { name, path: entry_path, is_dir, children })
+        })
+        .collect::<Result<Vec<_>, String>>()?;
+
+    entries.sort_by(|a, b| {
+        b.is_dir.cmp(&a.is_dir).then(a.name.to_lowercase().cmp(&b.name.to_lowercase()))
+    });
+
+    Ok(entries)
 }
 
 #[tauri::command]
@@ -69,43 +74,6 @@ fn open_project(app: tauri::AppHandle) -> Result<Option<String>, String> {
         .blocking_pick_file();
 
     Ok(file.map(|p| p.to_string()))
-}
-
-// Provides directories and files from the given path
-#[tauri::command]
-fn read_directory(path: &str) -> Result<Vec<FileNode>, String> {
-    use std::fs;
-
-    let mut entries: Vec<FileNode> = fs::read_dir(path)
-        .map_err(|e| e.to_string())?
-        .filter_map(|e| e.ok())
-        .filter_map(|entry| {
-            let meta = entry.metadata().ok()?;
-            let is_dir = meta.is_dir();
-            let entry_path = entry.path().to_string_lossy().to_string();
-            let name = entry.file_name().to_string_lossy().to_string();
-
-            // Only add .yarn files
-            if !is_dir && !name.ends_with(".yarn") {
-                return None;
-            }
-
-            // Recursively read children if it's a directory
-            let children = if is_dir {
-                Some(read_directory(&entry_path).unwrap_or_default())
-            } else {
-                None
-            };
-
-            Some(Ok(FileNode { name, path: entry_path, is_dir, children }))
-        })
-        .collect::<Result<Vec<_>, String>>()?;
-
-    entries.sort_by(|a, b| {
-        b.is_dir.cmp(&a.is_dir).then(a.name.to_lowercase().cmp(&b.name.to_lowercase()))
-    });
-
-    Ok(entries)
 }
 
 // Update files on move
@@ -144,10 +112,10 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
             read_yarn_file,
-            select_directory,
+            pick_directory,
             create_project_file,
             open_project,
-            read_directory,
+            get_sorted_directory_contents,
             move_path
         ])
         .run(tauri::generate_context!())

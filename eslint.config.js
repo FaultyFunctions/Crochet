@@ -7,22 +7,12 @@ import svelte from 'eslint-plugin-svelte';
 import prettier from 'eslint-config-prettier';
 
 export default defineConfig(
-  {
-    ignores: [
-      '.svelte-kit/',
-      'build/',
-      'dist/',
-      'src-tauri/target/',
-      'src-tauri/gen/',
-      '.vite/',
-      'node_modules/'
-    ]
-  },
-
+	{
+		ignores: ['.svelte-kit/', 'build/', 'dist/', 'src-tauri/target/', 'src-tauri/gen/', '.vite/', 'node_modules/']
+	},
 	js.configs.recommended,
 	ts.configs.recommended,
 	svelte.configs.recommended,
-
 	{
 		languageOptions: {
 			globals: {
@@ -31,7 +21,6 @@ export default defineConfig(
 			}
 		}
 	},
-
 	{
 		files: ['**/*.svelte', '**/*.svelte.ts', '**/*.svelte.js'],
 		languageOptions: {
@@ -43,6 +32,5 @@ export default defineConfig(
 			}
 		}
 	},
-
 	prettier
 );

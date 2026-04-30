@@ -4,13 +4,17 @@
 	import Sidebar from '$lib/components/Sidebar/Sidebar.svelte';
 	import Workspace from '$lib/components/Workspace/Workspace.svelte';
 	import LandingPage from '$lib/components/LandingPage/LandingPage.svelte';
-	import { projectStore } from '$lib/stores/projectStore.svelte';
+	import { project, ProjectState } from '$lib/stores/projectStore.svelte';
 	import { PaneGroup, Pane, PaneResizer } from 'paneforge';
 	import Toast from '$lib/components/Toast/Toast.svelte';
 </script>
 
 <!-- # MARKUP # -->
-{#if projectStore.projectPath}
+{#if project.state === ProjectState.LANDING_PAGE}
+	<LandingPage />
+{:else if project.state === ProjectState.LOADING_PROJECT}
+	<div></div>
+{:else if project.state === ProjectState.PROJECT_OPEN}
 	<PaneGroup direction="horizontal" class="h-full">
 		<ActivityBar />
 		<Pane defaultSize={40} class="h-full">
@@ -27,8 +31,6 @@
 		</Pane>
 	</PaneGroup>
 	<Toast />
-{:else}
-	<LandingPage />
 {/if}
 
 <!-- # STYLE # -->

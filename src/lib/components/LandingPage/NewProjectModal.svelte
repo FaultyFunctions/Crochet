@@ -1,9 +1,8 @@
 <!-- # SCRIPT # -->
 <script lang="ts">
-	import { projectStore } from '$lib/stores/projectStore.svelte';
-	import { checkProjectNameError } from '$lib/utils/validation';
 	import { invoke } from '@tauri-apps/api/core';
-	import { addToast } from '$lib/stores/toastStore.svelte';
+	import { project, ScriptType } from '$lib/stores/projectStore.svelte';
+	import { checkProjectNameError } from '$lib/utils/validation';
 	import Toast from '$lib/components/Toast/Toast.svelte';
 
 	type Props = {
@@ -15,7 +14,7 @@
 	// State
 	let projectName = $state('');
 	let selectedDirectory = $state<string | null>(null);
-	let scriptingLanguage = $state<'ChatterScript' | 'Yarn Spinner Script' | null>(null);
+	let scriptingLanguage = $state<ScriptType>(ScriptType.YARNSPINNER);
 
 	// Validation
 	let projectNameError = $derived(checkProjectNameError(projectName));
@@ -26,32 +25,28 @@
 			selectedDirectory != null
 	);
 
-	async function selectDirectory() {
-		selectedDirectory = await projectStore.selectDirectory();
-	}
+	const handleBrowseDirectory = async () => {
+		const directory = await invoke<string | null>('pick_directory');
 
-	async function handleCreate(e: SubmitEvent) {
+		// Make sure we don't display null if the user cancels
+		if (directory) selectedDirectory = directory;
+	};
+
+	const handleCreate = async (e: SubmitEvent) => {
 		e.preventDefault();
 
-		try {
-			await invoke('create_project_file', {
-				name: projectName.trim(),
-				path: selectedDirectory,
-				scriptType: scriptingLanguage
-			});
-			projectStore.loadProject(selectedDirectory!);
-			dialog?.close();
-		} catch (e) {
-			addToast(String(e), 'error');
-			console.error(e);
-		}
-	}
+		await project.initialize({
+			name: projectName,
+			path: selectedDirectory!,
+			scriptType: scriptingLanguage
+		});
+	};
 
-	function resetForm() {
+	const resetForm = () => {
 		projectName = '';
 		selectedDirectory = null;
-		scriptingLanguage = null;
-	}
+		scriptingLanguage = ScriptType.YARNSPINNER;
+	};
 </script>
 
 <!-- # MARKUP # -->
@@ -84,15 +79,14 @@
 							bind:value={selectedDirectory}
 							required
 							disabled />
-						<button type="button" class="btn btn-soft join-item" onclick={selectDirectory}>Browse</button>
+						<button type="button" class="btn btn-soft join-item" onclick={handleBrowseDirectory}>Browse</button>
 					</div>
 				</fieldset>
 				<fieldset class="fieldset">
 					<legend class="fieldset-legend">Scripting Language</legend>
 					<select bind:value={scriptingLanguage} class="select w-full bg-base-300 appearance-none">
-						<option value={null} class="text-neutral" disabled selected hidden></option>
-						<option>ChatterScript</option>
-						<option>Yarn Spinner Script</option>
+						<option value={ScriptType.YARNSPINNER}>YarnSpinner</option>
+						<option value={ScriptType.CHATTERBOX}>ChatterBox</option>
 					</select>
 				</fieldset>
 			</div>
@@ -101,7 +95,9 @@
 					type="submit"
 					disabled={!canCreate}
 					class="btn btn-success btn-soft w-36"
-					class:btn-disabled={!canCreate}>Create</button>
+					class:btn-disabled={!canCreate}>
+					Create
+				</button>
 				<button type="button" onclick={() => dialog?.close()} class="btn btn-ghost btn-error">Cancel</button>
 			</div>
 		</form>

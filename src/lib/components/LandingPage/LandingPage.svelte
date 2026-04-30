@@ -2,6 +2,7 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
 	import { Pane, PaneGroup } from 'paneforge';
+	import { project } from '$lib/stores/projectStore.svelte';
 	import NewProjectModal from '$lib/components/LandingPage/NewProjectModal.svelte';
 
 	let newProjectDialog = $state<HTMLDialogElement>();
@@ -16,7 +17,9 @@
 		<div class="class-body h-full w-full">
 			<PaneGroup direction="vertical">
 				<Pane defaultSize={10} class="flex items-center justify-between pl-8 pr-8">
-					<span class="text-2xl font-bold">Crochet <span class="badge badge-soft badge-info">v1.0.0</span></span>
+					<span class="text-2xl font-bold">
+						Crochet <span class="badge badge-soft badge-info">v1.0.0</span>
+					</span>
 
 					<button class="btn btn-soft btn-info"><Icon icon="pajamas:settings" class="text-base"></Icon>Settings</button>
 				</Pane>
@@ -27,10 +30,12 @@
 								<Pane defaultSize={33} class="border-t border-neutral p-8 flex flex-col">
 									<h2 class="card-title">Start</h2>
 									<div class="flex flex-col justify-center gap-2 flex-1">
-										<button class="btn btn-block btn-primary" onclick={() => newProjectDialog?.showModal()}
-											><Icon icon="pajamas:issue-new" class="text-base"></Icon>New Project</button>
-										<button class="btn btn-block btn-accent"
-											><Icon icon="pajamas:folder-open" class="text-base"></Icon>Open Project</button>
+										<button class="btn btn-block btn-primary" onclick={() => newProjectDialog?.showModal()}>
+											<Icon icon="pajamas:issue-new" class="text-base"></Icon>New Project
+										</button>
+										<button class="btn btn-block btn-accent" onclick={project.openProject}>
+											<Icon icon="pajamas:folder-open" class="text-base"></Icon>Open Project
+										</button>
 									</div>
 								</Pane>
 								<Pane defaultSize={33} class="border-t border-neutral p-8 flex flex-col">
@@ -83,8 +88,9 @@
 					</PaneGroup>
 				</Pane>
 				<footer class="footer border-t border-neutral justify-end pb-2 pt-2 pr-4 text-base-content/50">
-					<a href="https://github.com/FaultyFunctions/Crochet/blob/main/LICENSE.md" target="_blank"
-						>© {new Date().getFullYear()} FaultyFunctions. Licensed under the MIT License.</a>
+					<a href="https://github.com/FaultyFunctions/Crochet/blob/main/LICENSE.md" target="_blank">
+						© {new Date().getFullYear()} FaultyFunctions. Licensed under the MIT License.
+					</a>
 				</footer>
 			</PaneGroup>
 		</div>

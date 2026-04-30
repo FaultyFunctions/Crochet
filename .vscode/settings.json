@@ -12,14 +12,12 @@
 	"[svelte]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
-	"eslint.validate": [
-		"javascript",
-		"javascriptreact",
-		"typescript",
-		"svelte"
-	],
+	"eslint.validate": ["javascript", "javascriptreact", "typescript", "svelte"],
 	"editor.codeActionsOnSave": {
 		"source.fixAll.eslint": "explicit"
 	},
-	"eslint.useFlatConfig": true
+	"eslint.useFlatConfig": true,
+	"[json]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	}
 }
