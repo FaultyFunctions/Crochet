@@ -12,8 +12,6 @@
 <!-- # MARKUP # -->
 {#if project.state === ProjectState.LANDING_PAGE}
 	<LandingPage />
-{:else if project.state === ProjectState.LOADING_PROJECT}
-	<div></div>
 {:else if project.state === ProjectState.PROJECT_OPEN}
 	<PaneGroup direction="horizontal" class="h-full">
 		<ActivityBar />

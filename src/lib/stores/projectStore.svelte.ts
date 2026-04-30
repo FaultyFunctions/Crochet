@@ -6,7 +6,6 @@ import { z } from 'zod';
 
 export enum ProjectState {
 	LANDING_PAGE = 'LANDING_PAGE',
-	LOADING_PROJECT = 'LOADING_PROJECT',
 	PROJECT_OPEN = 'PROJECT_OPEN'
 }
 
@@ -37,52 +36,40 @@ class ProjectStore {
 	state = $state<ProjectState>(ProjectState.LANDING_PAGE);
 
 	initialize = async (initialConfig: InitialConfig): Promise<void> => {
-		// Store previous project state in case something goes wrong
-		const previousConfig = this.config;
-		const previousFileTree = this.fileTree;
-		const previousState = this.state;
-
-		this.config = {
+		const config = {
 			fileVersion: PROJECT_FILE_VERSION,
 			...initialConfig
 		};
 
 		try {
-			await invoke('create_project_file', { name: initialConfig.name, path: initialConfig.path, config: this.config });
-			this.state = ProjectState.LOADING_PROJECT;
+			await invoke('create_project_file', { name: config.name, path: config.path, config: config });
+			const fileTree = await invoke<FileNode[]>('get_sorted_directory_contents', { path: config.path });
 
-			this.fileTree = await invoke<FileNode[]>('get_sorted_directory_contents', { path: initialConfig.path });
+			// Update State
+			this.config = config;
+			this.fileTree = fileTree;
 			this.state = ProjectState.PROJECT_OPEN;
 		} catch (err) {
 			console.error(err);
 			addToast(String(err), 'error');
-			// Restore previous project state
-			this.config = previousConfig;
-			this.fileTree = previousFileTree;
-			this.state = previousState;
 		}
 	};
 
 	openProjectFile = async (): Promise<void> => {
-		// Store previous project state in case something goes wrong
-		const previousConfig = this.config;
-		const previousFileTree = this.fileTree;
-		const previousState = this.state;
-
 		try {
 			const data = await invoke<string | null>('open_project_file');
 			if (data === null) return; // User Cancelled
 
-			this.config = ProjectConfigSchema.parse(JSON.parse(data));
-			this.fileTree = await invoke<FileNode[]>('get_sorted_directory_contents', { path: this.config.path });
+			const config = ProjectConfigSchema.parse(JSON.parse(data));
+			const fileTree = await invoke<FileNode[]>('get_sorted_directory_contents', { path: config.path });
+
+			// Update State
+			this.config = config;
+			this.fileTree = fileTree;
 			this.state = ProjectState.PROJECT_OPEN;
 		} catch (err) {
 			console.error(err);
 			addToast(String(err), 'error');
-			// Restore previous project state
-			this.config = previousConfig;
-			this.fileTree = previousFileTree;
-			this.state = previousState;
 		}
 	};
 }
