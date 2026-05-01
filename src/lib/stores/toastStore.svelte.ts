@@ -21,4 +21,8 @@ export const addToast = (message: string, type: ToastType = 'info', duration = 3
 	setTimeout(() => {
 		toastList = toastList.filter((t) => t.id !== id);
 	}, duration);
+
+	if (type === 'error') {
+		console.log(message);
+	}
 };

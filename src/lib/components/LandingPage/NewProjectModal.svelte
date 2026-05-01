@@ -1,7 +1,7 @@
 <!-- # SCRIPT # -->
 <script lang="ts">
 	import { invoke } from '@tauri-apps/api/core';
-	import { project, ScriptType } from '$lib/stores/projectStore.svelte';
+	import { project, ProjectType as ProjectType } from '$lib/stores/projectStore.svelte';
 	import { checkProjectNameError } from '$lib/utils/validation';
 	import Toast from '$lib/components/Toast/Toast.svelte';
 
@@ -14,15 +14,12 @@
 	// State
 	let projectName = $state('');
 	let selectedDirectory = $state<string | null>(null);
-	let scriptingLanguage = $state<ScriptType>(ScriptType.YARNSPINNER);
+	let projectType = $state<ProjectType>(ProjectType.YARNSPINNER);
 
 	// Validation
 	let projectNameError = $derived(checkProjectNameError(projectName));
 	let canCreate = $derived(
-		projectNameError === null &&
-			projectName.trim().length > 0 &&
-			scriptingLanguage !== null &&
-			selectedDirectory != null
+		projectNameError === null && projectName.trim().length > 0 && projectType !== null && selectedDirectory != null
 	);
 
 	const handleBrowseDirectory = async () => {
@@ -38,14 +35,14 @@
 		await project.initialize({
 			name: projectName,
 			path: selectedDirectory!,
-			scriptType: scriptingLanguage
+			projectType: projectType
 		});
 	};
 
 	const resetForm = () => {
 		projectName = '';
 		selectedDirectory = null;
-		scriptingLanguage = ScriptType.YARNSPINNER;
+		projectType = ProjectType.YARNSPINNER;
 	};
 </script>
 
@@ -64,7 +61,8 @@
 						required
 						bind:value={projectName}
 						class="input w-full bg-base-300"
-						class:input-error={projectNameError !== null} />
+						class:input-error={projectNameError !== null}
+					/>
 					{#if projectNameError}
 						<p class="fieldset-label text-error">{projectNameError}</p>
 					{/if}
@@ -78,15 +76,16 @@
 							placeholder="No directory selected..."
 							bind:value={selectedDirectory}
 							required
-							disabled />
+							disabled
+						/>
 						<button type="button" class="btn btn-soft join-item" onclick={handleBrowseDirectory}>Browse</button>
 					</div>
 				</fieldset>
 				<fieldset class="fieldset">
-					<legend class="fieldset-legend">Scripting Language</legend>
-					<select bind:value={scriptingLanguage} class="select w-full bg-base-300 appearance-none">
-						<option value={ScriptType.YARNSPINNER}>YarnSpinner</option>
-						<option value={ScriptType.CHATTERBOX}>ChatterBox</option>
+					<legend class="fieldset-legend">Project Type</legend>
+					<select bind:value={projectType} class="select w-full bg-base-300 appearance-none">
+						<option value={ProjectType.YARNSPINNER}>Yarn Spinner</option>
+						<option value={ProjectType.CHATTERBOX}>Chatterbox</option>
 					</select>
 				</fieldset>
 			</div>
@@ -95,7 +94,8 @@
 					type="submit"
 					disabled={!canCreate}
 					class="btn btn-success btn-soft w-36"
-					class:btn-disabled={!canCreate}>
+					class:btn-disabled={!canCreate}
+				>
 					Create
 				</button>
 				<button type="button" onclick={() => dialog?.close()} class="btn btn-ghost btn-error">Cancel</button>

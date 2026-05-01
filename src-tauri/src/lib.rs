@@ -11,6 +11,15 @@ pub struct FileNode {
     children: Option<Vec<FileNode>>
 }
 
+const ALLOWED_EXTS: &[&str] = &["yarn", "chatter"];
+
+fn is_allowed_file(path: &std::path::Path) -> bool {
+    path.extension()
+        .and_then(|e| e.to_str())
+        .map(|ext| ALLOWED_EXTS.iter().any(|a| a.eq_ignore_ascii_case(ext)))
+        .unwrap_or(false)
+}
+
 fn main_window(app: &tauri::AppHandle) -> tauri::WebviewWindow {
     app.get_webview_window("main").unwrap()
 }
@@ -51,17 +60,27 @@ fn get_sorted_directory_contents(path: &str) -> Result<Vec<FileNode>, String> {
     use std::fs;
 
     let mut entries: Vec<FileNode> = fs::read_dir(path)
-        .map_err(|e| e.to_string())?
+        .map_err(|err| err.to_string())?
         .filter_map(|e| e.ok())
-        .map(|entry| {
-            let meta = entry.metadata().map_err(|e| e.to_string())?;
-            let is_dir = meta.is_dir();
-            let entry_path = entry.path().to_string_lossy().to_string();
-            let name = entry.file_name().to_string_lossy().to_string();
-            let children = if is_dir { Some(vec![]) } else { None };
-            Ok(FileNode { name, path: entry_path, is_dir, children })
+        .filter(|e| {
+            e.file_type().map(|t| t.is_dir()).unwrap_or(false) || is_allowed_file(&e.path())
         })
-        .collect::<Result<Vec<_>, String>>()?;
+        .filter_map(|e| {
+            let meta = e.metadata().ok()?;
+            let is_dir = meta.is_dir();
+            let entry_path = e.path();
+
+            let name = e.file_name().to_string_lossy().to_string();
+            let children = if is_dir { Some(vec![]) } else { None };
+
+            Some(FileNode {
+                name,
+                path: entry_path.to_string_lossy().to_string(),
+                is_dir,
+                children
+            })
+        })
+        .collect();
 
     entries.sort_by(|a, b| {
         b.is_dir.cmp(&a.is_dir).then(a.name.to_lowercase().cmp(&b.name.to_lowercase()))
@@ -100,18 +119,18 @@ async fn open_project_file(app: tauri::AppHandle) -> Result<Option<String>, Stri
 
 // Update files on move
 #[tauri::command]
-fn move_path(source: &str, destination: &str) -> Result<(), String> {
+fn move_path(source_path: &str, target_path: &str) -> Result<(), String> {
     use std::path::Path;
 
-    let source_path = Path::new(source);
-    let file_name = source_path.file_name().ok_or("Invalid source path")?;
-    let dest_path = Path::new(destination).join(file_name);
+    let src_path = Path::new(source_path);
+    let file_name = src_path.file_name().ok_or("Invalid source path")?;
+    let dest_path = Path::new(target_path).join(file_name);
 
     if dest_path.exists() {
         return Err(format!("'{}' already exists in the destination.", file_name.to_string_lossy()));
     }
 
-    std::fs::rename(source, dest_path).map_err(|e| e.to_string())
+    std::fs::rename(source_path, dest_path).map_err(|e| e.to_string())
 }
 
 #[tauri::command]
@@ -122,7 +141,7 @@ fn read_yarn_file(path: &str) -> Result<Vec<String>, String> {
     let lines = BufReader::new(file)
         .lines()
         .collect::<Result<Vec<_>, _>>()
-        .map_err(|e| e.to_string())?;
+        .map_err(|err| err.to_string())?;
     Ok(lines)
 }
 

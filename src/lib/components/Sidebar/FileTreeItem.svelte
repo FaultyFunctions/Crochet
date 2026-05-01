@@ -3,6 +3,8 @@
 	import Icon from '@iconify/svelte';
 	import type { FileNode } from '$lib/types/fileTree';
 	import FileTreeItem from './FileTreeItem.svelte';
+	import { createDraggable, createDroppable } from '@dnd-kit/svelte';
+	import { project } from '$lib/stores/projectStore.svelte';
 
 	type Props = {
 		node: FileNode;
@@ -10,23 +12,54 @@
 	};
 
 	let { node, depth = 0 }: Props = $props();
-	let isOpen = $state(false);
+	const isOpen = $derived(project.expandedFolders.has(node.path));
 
-	// async function handleToggle(e: Event) {
-	// 	const details = e.target as HTMLDetailsElement;
-	// 	if (details.open) {
-	// 		await projectStore.expandNode(node);
-	// 	}
-	// 	isOpen = details.open;
-	// }
+	const draggable = createDraggable({
+		get id() {
+			return node.path;
+		},
+		type: 'file-node',
+		get data() {
+			return { node };
+		}
+	});
+
+	const droppable = node.isDir
+		? createDroppable({
+				get id() {
+					return `drop:${node.path}`;
+				},
+				type: 'folder',
+				accept: 'file-node',
+				get data() {
+					return { node };
+				},
+				get disabled() {
+					return draggable.isDragSource;
+				}
+			})
+		: null;
+
+	const handleToggle = (e: Event) => {
+		const open = (e.currentTarget as HTMLDetailsElement).open;
+		project.toggleFolder(node, open);
+	};
 </script>
 
 <!-- # MARKUP # -->
 {#if node.isDir}
 	<li>
-		<details>
-			<summary class="flex items-center gap-1 after:hidden">
-				<Icon icon="pajamas:chevron-lg-right" class="transition-transform duration-150 in-[[open]]:rotate-90" />
+		<details open={isOpen} ontoggle={handleToggle}>
+			<summary
+				{@attach draggable.attach}
+				{@attach droppable!.attach}
+				class="flex items-center gap-1 after:hidden"
+				class:opacity-40={draggable.isDragSource}
+				class:bg-primary={droppable!.isDropTarget}
+			>
+				<span class="transition-transform duration-150" class:rotate-90={isOpen}>
+					<Icon icon="pajamas:chevron-lg-right" />
+				</span>
 				<Icon icon={isOpen ? 'pajamas:folder-open' : 'pajamas:folder'} class="text-base-content/60" />
 				{node.name}
 			</summary>
@@ -39,8 +72,7 @@
 	</li>
 {:else}
 	<li>
-		<!-- svelte-ignore a11y_missing_attribute -->
-		<a class="flex items-center gap-1">
+		<a {@attach draggable.attach} href={null} class="flex items-center gap-1" class:opacity-40={draggable.isDragSource}>
 			<span class="w-3 shrink-0"></span>
 			<Icon icon="pajamas:comment-dots" class="text-base-content/60" />
 			{node.name}

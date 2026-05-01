@@ -44,13 +44,13 @@
 										<a href="#">
 											<Icon icon="pajamas:link" class="inline"></Icon> Getting Started
 										</a>
-										<a href="https://www.jujuadams.com/Chatterbox" target="_blank">
-											<Icon icon="pajamas:link" class="inline"></Icon> Chatterbox Docs
-										</a>
 										<a
 											href="https://docs.yarnspinner.dev/write-yarn-scripts/scripting-fundamentals/lines-nodes-and-options"
 											target="_blank">
 											<Icon icon="pajamas:link" class="inline"></Icon> Yarn Spinner Docs
+										</a>
+										<a href="https://www.jujuadams.com/Chatterbox" target="_blank">
+											<Icon icon="pajamas:link" class="inline"></Icon> Chatterbox Docs
 										</a>
 									</div>
 								</Pane>
@@ -64,10 +64,10 @@
 											<Icon icon="pajamas:bug" class="inline"></Icon> Report a Bug
 										</a>
 										<a href="#">
-											<Icon icon="pajamas:discord" class="inline"></Icon> Chatterbox Discord Server
+											<Icon icon="pajamas:discord" class="inline"></Icon> Yarn Spinner Discord Server
 										</a>
 										<a href="#">
-											<Icon icon="pajamas:discord" class="inline"></Icon> Yarn Spinner Discord Server
+											<Icon icon="pajamas:discord" class="inline"></Icon> Chatterbox Discord Server
 										</a>
 									</div>
 								</Pane>
