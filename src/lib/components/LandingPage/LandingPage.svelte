@@ -2,7 +2,7 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
 	import { Pane, PaneGroup } from 'paneforge';
-	import { project } from '$lib/stores/projectStore.svelte';
+	import { projectStore } from '$lib/stores/projectStore.svelte';
 	import NewProjectModal from '$lib/components/LandingPage/NewProjectModal.svelte';
 
 	let newProjectDialog = $state<HTMLDialogElement>();
@@ -13,7 +13,8 @@
 
 <div class="h-screen w-full flex items-center justify-center bg-base-200 select-none">
 	<div
-		class="card bg-base-300 max-w-300 max-h-250 w-full h-full shadow-[0_0_0.5rem_0.1rem] shadow-black/20 ring-2 ring-base-100">
+		class="card bg-base-300 max-w-300 max-h-250 w-full h-full shadow-[0_0_0.5rem_0.1rem] shadow-black/20 ring-2 ring-base-100"
+	>
 		<div class="class-body h-full w-full">
 			<PaneGroup direction="vertical">
 				<Pane defaultSize={10} class="flex items-center justify-between pl-8 pr-8">
@@ -33,7 +34,7 @@
 										<button class="btn btn-block btn-primary" onclick={() => newProjectDialog?.showModal()}>
 											<Icon icon="pajamas:issue-new" class="text-base"></Icon>New Project
 										</button>
-										<button class="btn btn-block btn-accent" onclick={project.openProjectFile}>
+										<button class="btn btn-block btn-accent" onclick={projectStore.openProjectFile}>
 											<Icon icon="pajamas:folder-open" class="text-base"></Icon>Open Project
 										</button>
 									</div>
@@ -46,7 +47,8 @@
 										</a>
 										<a
 											href="https://docs.yarnspinner.dev/write-yarn-scripts/scripting-fundamentals/lines-nodes-and-options"
-											target="_blank">
+											target="_blank"
+										>
 											<Icon icon="pajamas:link" class="inline"></Icon> Yarn Spinner Docs
 										</a>
 										<a href="https://www.jujuadams.com/Chatterbox" target="_blank">

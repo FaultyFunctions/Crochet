@@ -1,7 +1,7 @@
 <!-- # SCRIPT # -->
 <script lang="ts">
 	import { invoke } from '@tauri-apps/api/core';
-	import { project, ProjectType as ProjectType } from '$lib/stores/projectStore.svelte';
+	import { projectStore, ProjectType as ProjectType } from '$lib/stores/projectStore.svelte';
 	import { checkProjectNameError } from '$lib/utils/validation';
 	import Toast from '$lib/components/Toast/Toast.svelte';
 
@@ -32,7 +32,7 @@
 	const handleCreate = async (e: SubmitEvent) => {
 		e.preventDefault();
 
-		await project.initialize({
+		await projectStore.initialize({
 			name: projectName,
 			path: selectedDirectory!,
 			projectType: projectType

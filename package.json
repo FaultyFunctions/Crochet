@@ -16,8 +16,8 @@
 	},
 	"license": "MIT",
 	"dependencies": {
-		"@dnd-kit/svelte": "^0.4.0",
 		"@eslint/js": "^10.0.1",
+		"@headless-tree/core": "^1.6.3",
 		"@tailwindcss/vite": "^4.2.4",
 		"@tauri-apps/api": "^2.10.1",
 		"@tauri-apps/plugin-dialog": "^2.7.0",
