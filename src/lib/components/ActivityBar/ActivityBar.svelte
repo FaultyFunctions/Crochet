@@ -19,12 +19,14 @@
 			icon={projectIcon}
 			tooltip="Project"
 			selected={selectedSection}
-			onclick={() => (selectedSection = projectIcon)} />
+			onclick={() => (selectedSection = projectIcon)}
+		/>
 		<ActivityBarButton
 			icon={searchIcon}
 			tooltip="Search"
 			selected={selectedSection}
-			onclick={() => (selectedSection = searchIcon)} />
+			onclick={() => (selectedSection = searchIcon)}
+		/>
 	</div>
 	<div class="flex flex-col items-center">
 		<NewProjectButton />

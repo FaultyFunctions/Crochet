@@ -13,14 +13,16 @@
 </script>
 
 <div
-	class="fixed top-0 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pt-4 pointer-events-none select-none">
+	class="fixed top-0 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pt-4 pointer-events-none select-none"
+>
 	{#each toasts.value as toast (toast.id)}
 		{@const type = config[toast.type] || config.error}
 		<div
 			animate:flip={{ duration: 300 }}
 			in:fly={{ y: -80, duration: 150 }}
 			out:fly={{ duration: 150 }}
-			class="alert {type.class} alert-soft pointer-events-auto">
+			class="alert {type.class} alert-soft pointer-events-auto"
+		>
 			<Icon icon={type.icon} class="-mr-2" width={16} />
 			<span>{toast.message}</span>
 		</div>

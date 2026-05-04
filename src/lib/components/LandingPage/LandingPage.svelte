@@ -42,7 +42,7 @@
 								<Pane defaultSize={33} class="border-t border-neutral p-8 flex flex-col">
 									<h2 class="card-title">Reference</h2>
 									<div class="flex flex-col flex-1 justify-center items-start gap-2">
-										<a href="#">
+										<a href={null}>
 											<Icon icon="pajamas:link" class="inline"></Icon> Getting Started
 										</a>
 										<a
@@ -59,16 +59,16 @@
 								<Pane defaultSize={33} class="border-t border-neutral p-8 flex flex-col">
 									<h2 class="card-title">Community</h2>
 									<div class="flex flex-col flex-1 justify-center items-start gap-2">
-										<a href="#">
+										<a href={null}>
 											<Icon icon="pajamas:github" class="inline"></Icon> GitHub
 										</a>
-										<a href="#">
+										<a href={null}>
 											<Icon icon="pajamas:bug" class="inline"></Icon> Report a Bug
 										</a>
-										<a href="#">
+										<a href={null}>
 											<Icon icon="pajamas:discord" class="inline"></Icon> Yarn Spinner Discord Server
 										</a>
-										<a href="#">
+										<a href={null}>
 											<Icon icon="pajamas:discord" class="inline"></Icon> Chatterbox Discord Server
 										</a>
 									</div>
