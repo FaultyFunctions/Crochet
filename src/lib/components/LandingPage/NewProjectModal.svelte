@@ -1,4 +1,4 @@
-<!-- # SCRIPT # -->
+<!-- SCRIPT -->
 <script lang="ts">
 	import { invoke } from '@tauri-apps/api/core';
 	import { projectStore, ProjectType as ProjectType } from '$lib/stores/projectStore.svelte';
@@ -46,7 +46,7 @@
 	};
 </script>
 
-<!-- # MARKUP # -->
+<!-- MARKUP -->
 <dialog bind:this={dialog} class="modal" onclose={resetForm}>
 	<div class="modal-box select-none">
 		<h1 class="text-center text-2xl font-bold">Create New Project</h1>
@@ -104,3 +104,7 @@
 	</div>
 	<Toast />
 </dialog>
+
+<!-- STYLE -->
+<style>
+</style>

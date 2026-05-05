@@ -1,4 +1,4 @@
-<!-- # SCRIPT # -->
+<!-- SCRIPT -->
 <script lang="ts">
 	import WorkspaceTabHolder from '$lib/components/Workspace/WorkspaceTabHolder.svelte';
 	import Icon from '@iconify/svelte';
@@ -64,7 +64,7 @@
 	let edges = $state.raw([{ id: 'e1-2', source: '1', target: '2' }]);
 </script>
 
-<!-- # MARKUP # -->
+<!-- MARKUP -->
 <div class="flex h-full flex-col">
 	<WorkspaceTabHolder />
 	<div class="flex-1">
@@ -98,7 +98,7 @@
 	</div>
 </div>
 
-<!-- # STYLE # -->
+<!-- STYLE -->
 <style>
 	@reference "tailwindcss";
 

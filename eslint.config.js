@@ -36,7 +36,30 @@ export default defineConfig(
 	{
 		rules: {
 			'no-unused-vars': 'off',
-			'@typescript-eslint/no-unused-vars': 'off'
+			'@typescript-eslint/no-unused-vars': 'off',
+			'svelte/no-target-blank': 'error',
+			'svelte/block-lang': [
+				'error',
+				{
+					enforceScriptPresent: true,
+					enforceStylePresent: true,
+					script: 'ts',
+					style: null
+				}
+			],
+			'svelte/no-add-event-listener': 'error',
+			'svelte/no-at-debug-tags': 'warn',
+			'svelte/no-spaces-around-equal-signs-in-attribute': 'error',
+			'svelte/prefer-style-directive': 'error',
+			'svelte/spaced-html-comment': ['error', 'always'],
+			'no-trailing-spaces': 'off',
+			'svelte/no-trailing-spaces': [
+				'error',
+				{
+					skipBlankLines: false,
+					ignoreComments: false
+				}
+			]
 		}
 	}
 );

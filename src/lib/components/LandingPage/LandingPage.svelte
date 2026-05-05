@@ -1,4 +1,4 @@
-<!-- # SCRIPT # -->
+<!-- SCRIPT -->
 <script lang="ts">
 	import Icon from '@iconify/svelte';
 	import { Pane, PaneGroup } from 'paneforge';
@@ -8,7 +8,7 @@
 	let newProjectDialog = $state<HTMLDialogElement>();
 </script>
 
-<!-- # MARKUP # -->
+<!-- MARKUP -->
 <NewProjectModal bind:dialog={newProjectDialog} />
 
 <div class="bg-base-400 flex h-screen w-full items-center justify-center select-none">
@@ -48,10 +48,11 @@
 										<a
 											href="https://docs.yarnspinner.dev/write-yarn-scripts/scripting-fundamentals/lines-nodes-and-options"
 											target="_blank"
+											rel="noopener noreferrer"
 										>
 											<Icon icon="pajamas:link" class="inline"></Icon> Yarn Spinner Docs
 										</a>
-										<a href="https://www.jujuadams.com/Chatterbox" target="_blank">
+										<a href="https://www.jujuadams.com/Chatterbox" target="_blank" rel="noopener noreferrer">
 											<Icon icon="pajamas:link" class="inline"></Icon> Chatterbox Docs
 										</a>
 									</div>
@@ -90,7 +91,11 @@
 					</PaneGroup>
 				</Pane>
 				<footer class="footer border-neutral text-base-content/50 justify-end border-t pt-2 pr-4 pb-2">
-					<a href="https://github.com/FaultyFunctions/Crochet/blob/main/LICENSE.md" target="_blank">
+					<a
+						href="https://github.com/FaultyFunctions/Crochet/blob/main/LICENSE.md"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
 						© {new Date().getFullYear()} FaultyFunctions. Licensed under the MIT License.
 					</a>
 				</footer>
@@ -98,3 +103,7 @@
 		</div>
 	</div>
 </div>
+
+<!-- STYLE -->
+<style>
+</style>

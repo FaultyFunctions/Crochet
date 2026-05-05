@@ -1,4 +1,4 @@
-<!-- # SCRIPT # -->
+<!-- SCRIPT -->
 <script lang="ts">
 	import Icon from '@iconify/svelte';
 
@@ -6,7 +6,7 @@
 	let { icon, tooltip, selected, onclick }: Props = $props();
 </script>
 
-<!-- # MARKUP # -->
+<!-- MARKUP -->
 {#if selected !== undefined}
 	<a
 		href={null}
@@ -28,3 +28,7 @@
 		<Icon {icon} width={24} />
 	</a>
 {/if}
+
+<!-- STYLE -->
+<style>
+</style>

@@ -1,4 +1,4 @@
-<!-- # SCRIPT # -->
+<!-- SCRIPT -->
 <script lang="ts">
 	import Icon from '@iconify/svelte';
 	import type { TreeRow } from '$lib/stores/fileTreeStore.svelte';
@@ -6,7 +6,7 @@
 	let { treeRow: treeRow }: { treeRow: TreeRow } = $props();
 </script>
 
-<!-- # MARKUP # -->
+<!-- MARKUP -->
 <button
 	{...treeRow.props}
 	class="flex w-full items-center gap-1.5 py-0.5 pr-2 text-left text-sm"
@@ -24,3 +24,7 @@
 	{/if}
 	<span class="min-w-0 flex-1 truncate">{treeRow.name}</span>
 </button>
+
+<!-- STYLE -->
+<style>
+</style>

@@ -1,4 +1,4 @@
-<!-- # SCRIPT # -->
+<!-- SCRIPT -->
 <script lang="ts">
 	import ActivityBarButton from '$lib/components/ActivityBar/ActivityBarButton.svelte';
 	import NewProjectButton from '$lib/components/ActivityBar/NewProjectButton.svelte';
@@ -12,7 +12,7 @@
 	let selectedSection = $state<string>(projectIcon);
 </script>
 
-<!-- # MARKUP # -->
+<!-- MARKUP -->
 <aside class="bg-base-100 flex h-screen w-12 flex-col items-center justify-between">
 	<div class="flex flex-col">
 		<ActivityBarButton
@@ -36,3 +36,7 @@
 		<ActivityBarButton icon={infoIcon} tooltip="Help" />
 	</div>
 </aside>
+
+<!-- STYLE -->
+<style>
+</style>

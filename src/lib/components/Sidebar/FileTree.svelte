@@ -1,4 +1,4 @@
-<!-- # SCRIPT # -->
+<!-- SCRIPT -->
 <script lang="ts">
 	import { fileTreeStore } from '$lib/stores/fileTreeStore.svelte';
 	import { adaptReactProps } from '$lib/utils/adaptReactProps';
@@ -9,7 +9,7 @@
 	const containerProps = $derived(tree ? adaptReactProps(tree.getContainerProps()) : {});
 </script>
 
-<!-- # MARKUP # -->
+<!-- MARKUP -->
 {#if tree}
 	<div {...containerProps} class="flex min-w-0 flex-col py-1">
 		{#each treeRows as treeRow (treeRow.id)}
@@ -19,3 +19,7 @@
 {:else}
 	<div class="px-3 py-2 text-sm opacity-60">No project loaded.</div>
 {/if}
+
+<!-- STYLE -->
+<style>
+</style>

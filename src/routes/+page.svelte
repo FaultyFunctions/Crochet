@@ -1,4 +1,4 @@
-<!-- # SCRIPT # -->
+<!-- SCRIPT -->
 <script lang="ts">
 	import ActivityBar from '$lib/components/ActivityBar/ActivityBar.svelte';
 	import Sidebar from '$lib/components/Sidebar/Sidebar.svelte';
@@ -9,7 +9,7 @@
 	import Toast from '$lib/components/Toast/Toast.svelte';
 </script>
 
-<!-- # MARKUP # -->
+<!-- MARKUP -->
 {#if projectStore.state === ProjectState.LANDING_PAGE}
 	<LandingPage />
 {:else if projectStore.state === ProjectState.PROJECT_OPEN}
@@ -31,6 +31,6 @@
 	<Toast />
 {/if}
 
-<!-- # STYLE # -->
+<!-- STYLE -->
 <style>
 </style>
