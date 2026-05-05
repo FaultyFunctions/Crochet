@@ -4,6 +4,19 @@
 	themes: all;
 }
 
+@theme inline {
+	--color-base-400: oklch(from var(--color-base-300) calc(l * 0.94) c h);
+	--color-base-500: oklch(from var(--color-base-400) calc(l * 0.94) c h);
+}
+
+@utility bg-base-400 {
+	background-color: var(--color-base-400);
+}
+
+@utility bg-base-500 {
+	background-color: var(--color-base-500);
+}
+
 .tooltip::before,
 .tooltip::after {
 	transition-delay: 500ms;

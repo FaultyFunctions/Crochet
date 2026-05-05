@@ -72,7 +72,10 @@ class FileTreeStore {
 		return this.tree?.getItems() ?? [];
 	});
 
-	treeRows = $derived.by<TreeRow[]>(() => this.treeItems.map(buildTreeRow));
+	treeRows = $derived.by<TreeRow[]>(() => {
+		void this.#revision;
+		return this.treeItems.map(buildTreeRow);
+	});
 
 	initialize = async (rootPath: string) => {
 		this.reset();
@@ -167,3 +170,12 @@ class FileTreeStore {
 }
 
 export const fileTreeStore = new FileTreeStore();
+
+/* ADDING FEATURES
+	1. Import the feature + its def type. Add to the features: [...] array.
+	2. Extend TreeState with & <Feature>Def<FileNode>['state']. Update initialTreeState if any keys are required.
+	3. Add a xxxFeatureFields function, spread it into buildTreeRow. (The only step that requires design thought.)
+	4. Wire callbacks in createTree (e.g., onRename → this.rename(...)).
+	5. Expose actions as store methods so components have a clean API.
+	6. Use in components.
+*/

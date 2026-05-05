@@ -5,8 +5,8 @@
 </script>
 
 <!-- # MARKUP # -->
-<aside class="grid grid-rows-[auto_1fr] bg-base-300 h-full overflow-y-auto">
-	<div class="sticky top-0 z-10 h-10 pl-4 bg-base-300 text-xs select-none content-center">
+<aside class="grid grid-rows-[auto_1fr] bg-base-400 h-full overflow-y-auto overflow-x-hidden">
+	<div class="sticky top-0 z-10 h-10 pl-4 text-xs select-none content-center whitespace-nowrap">
 		<h4>EXPLORER - {projectStore.config?.name}</h4>
 	</div>
 	<FileTree />

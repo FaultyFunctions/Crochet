@@ -11,7 +11,7 @@
 
 <!-- # MARKUP # -->
 {#if tree}
-	<div {...containerProps} class="flex flex-col py-1">
+	<div {...containerProps} class="flex flex-col py-1 min-w-0">
 		{#each treeRows as treeRow (treeRow.id)}
 			<FileTreeRow {treeRow} />
 		{/each}

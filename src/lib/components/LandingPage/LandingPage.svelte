@@ -11,7 +11,7 @@
 <!-- # MARKUP # -->
 <NewProjectModal bind:dialog={newProjectDialog} />
 
-<div class="h-screen w-full flex items-center justify-center bg-base-200 select-none">
+<div class="h-screen w-full flex items-center justify-center bg-base-400 select-none">
 	<div
 		class="card bg-base-300 max-w-300 max-h-250 w-full h-full shadow-[0_0_0.5rem_0.1rem] shadow-black/20 ring-2 ring-base-100"
 	>

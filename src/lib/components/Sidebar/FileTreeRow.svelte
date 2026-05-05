@@ -9,12 +9,10 @@
 <!-- # MARKUP # -->
 <button
 	{...treeRow.props}
-	class="hover:bg-base-300 flex w-full items-center gap-1.5 py-0.5 pr-2 text-left text-sm"
-	class:bg-primary={treeRow.isSelected}
-	class:text-primary-content={treeRow.isSelected}
-	class:ring-primary={treeRow.isFocused}
-	class:ring-1={treeRow.isFocused}
-	class:ring-inset={treeRow.isFocused}
+	class="flex w-full items-center gap-1.5 py-0.5 pr-2 text-left text-sm"
+	class:bg-base-100={treeRow.isSelected}
+	class:inset-ring-secondary={treeRow.isFocused}
+	class:inset-ring={treeRow.isFocused}
 	style:padding-left="{treeRow.level * 0.75 + 0.5}rem"
 >
 	{#if treeRow.isFolder}
@@ -24,5 +22,5 @@
 		<span class="w-4 shrink-0"></span>
 		<Icon icon="mdi:file-document-outline" class="shrink-0 opacity-70" />
 	{/if}
-	<span class="truncate">{treeRow.name}</span>
+	<span class="truncate min-w-0 flex-1">{treeRow.name}</span>
 </button>
