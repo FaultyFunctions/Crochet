@@ -11,7 +11,7 @@
 	<a
 		href={null}
 		{onclick}
-		class="h-12 w-12 flex items-center justify-center hover:text-base-content border-l-2 {selected === icon
+		class="hover:text-base-content flex h-12 w-12 items-center justify-center border-l-2 {selected === icon
 			? 'bg-base-300/50 text-base-content border-l-primary'
 			: 'text-primary/65 border-l-transparent'}
 	tooltip tooltip-right"
@@ -22,7 +22,7 @@
 {:else}
 	<a
 		href={null}
-		class="h-12 w-12 flex items-center justify-center text-primary/50 hover:text-base-content tooltip tooltip-right"
+		class="text-primary/50 hover:text-base-content tooltip tooltip-right flex h-12 w-12 items-center justify-center"
 		data-tip={tooltip}
 	>
 		<Icon {icon} width={24} />

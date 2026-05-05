@@ -13,7 +13,7 @@
 </script>
 
 <!-- # MARKUP # -->
-<aside class="w-12 h-screen bg-base-100 flex flex-col items-center justify-between">
+<aside class="bg-base-100 flex h-screen w-12 flex-col items-center justify-between">
 	<div class="flex flex-col">
 		<ActivityBarButton
 			icon={projectIcon}

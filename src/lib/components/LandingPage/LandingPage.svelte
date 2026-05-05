@@ -11,13 +11,13 @@
 <!-- # MARKUP # -->
 <NewProjectModal bind:dialog={newProjectDialog} />
 
-<div class="h-screen w-full flex items-center justify-center bg-base-400 select-none">
+<div class="bg-base-400 flex h-screen w-full items-center justify-center select-none">
 	<div
-		class="card bg-base-300 max-w-300 max-h-250 w-full h-full shadow-[0_0_0.5rem_0.1rem] shadow-black/20 ring-2 ring-base-100"
+		class="card bg-base-300 ring-base-100 h-full max-h-250 w-full max-w-300 shadow-[0_0_0.5rem_0.1rem] ring-2 shadow-black/20"
 	>
 		<div class="class-body h-full w-full">
 			<PaneGroup direction="vertical">
-				<Pane defaultSize={10} class="flex items-center justify-between pl-8 pr-8">
+				<Pane defaultSize={10} class="flex items-center justify-between pr-8 pl-8">
 					<span class="text-2xl font-bold">
 						Crochet <span class="badge badge-soft badge-info">v1.0.0</span>
 					</span>
@@ -28,9 +28,9 @@
 					<PaneGroup direction="horizontal" class="bg-base-100">
 						<Pane defaultSize={25}>
 							<PaneGroup direction="vertical" class="bg-base-200">
-								<Pane defaultSize={33} class="border-t border-neutral p-8 flex flex-col">
+								<Pane defaultSize={33} class="border-neutral flex flex-col border-t p-8">
 									<h2 class="card-title">Start</h2>
-									<div class="flex flex-col justify-center gap-2 flex-1">
+									<div class="flex flex-1 flex-col justify-center gap-2">
 										<button class="btn btn-block btn-primary" onclick={() => newProjectDialog?.showModal()}>
 											<Icon icon="pajamas:issue-new" class="text-base"></Icon>New Project
 										</button>
@@ -39,9 +39,9 @@
 										</button>
 									</div>
 								</Pane>
-								<Pane defaultSize={33} class="border-t border-neutral p-8 flex flex-col">
+								<Pane defaultSize={33} class="border-neutral flex flex-col border-t p-8">
 									<h2 class="card-title">Reference</h2>
-									<div class="flex flex-col flex-1 justify-center items-start gap-2">
+									<div class="flex flex-1 flex-col items-start justify-center gap-2">
 										<a href={null}>
 											<Icon icon="pajamas:link" class="inline"></Icon> Getting Started
 										</a>
@@ -56,9 +56,9 @@
 										</a>
 									</div>
 								</Pane>
-								<Pane defaultSize={33} class="border-t border-neutral p-8 flex flex-col">
+								<Pane defaultSize={33} class="border-neutral flex flex-col border-t p-8">
 									<h2 class="card-title">Community</h2>
-									<div class="flex flex-col flex-1 justify-center items-start gap-2">
+									<div class="flex flex-1 flex-col items-start justify-center gap-2">
 										<a href={null}>
 											<Icon icon="pajamas:github" class="inline"></Icon> GitHub
 										</a>
@@ -77,11 +77,11 @@
 						</Pane>
 						<Pane defaultSize={75}>
 							<PaneGroup direction="vertical" class="h-full">
-								<Pane defaultSize={50} class="border-t border-l border-neutral p-8 flex flex-col">
+								<Pane defaultSize={50} class="border-neutral flex flex-col border-t border-l p-8">
 									<h2 class="card-title">Recent Projects</h2>
 									<p>No Recent Projects...</p>
 								</Pane>
-								<Pane defaultSize={50} class="border-t border-l border-neutral p-8 flex flex-col">
+								<Pane defaultSize={50} class="border-neutral flex flex-col border-t border-l p-8">
 									<h2 class="card-title">Updates</h2>
 									<p>No Updates...</p>
 								</Pane>
@@ -89,7 +89,7 @@
 						</Pane>
 					</PaneGroup>
 				</Pane>
-				<footer class="footer border-t border-neutral justify-end pb-2 pt-2 pr-4 text-base-content/50">
+				<footer class="footer border-neutral text-base-content/50 justify-end border-t pt-2 pr-4 pb-2">
 					<a href="https://github.com/FaultyFunctions/Crochet/blob/main/LICENSE.md" target="_blank">
 						© {new Date().getFullYear()} FaultyFunctions. Licensed under the MIT License.
 					</a>

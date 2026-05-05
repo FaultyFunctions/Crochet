@@ -6,7 +6,7 @@
 	"jsxSingleQuote": true,
 	"htmlWhitespaceSensitivity": "ignore",
 	"bracketSameLine": false,
-	"plugins": ["prettier-plugin-svelte"],
+	"plugins": ["prettier-plugin-svelte", "prettier-plugin-tailwindcss"],
 	"svelteSortOrder": "options-scripts-markup-styles",
 	"overrides": [
 		{

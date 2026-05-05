@@ -49,7 +49,7 @@
 <!-- # MARKUP # -->
 <dialog bind:this={dialog} class="modal" onclose={resetForm}>
 	<div class="modal-box select-none">
-		<h1 class="text-2xl font-bold text-center">Create New Project</h1>
+		<h1 class="text-center text-2xl font-bold">Create New Project</h1>
 		<div class="divider"></div>
 
 		<form onsubmit={handleCreate}>
@@ -60,7 +60,7 @@
 						type="text"
 						required
 						bind:value={projectName}
-						class="input w-full bg-base-300"
+						class="input bg-base-300 w-full"
 						class:input-error={projectNameError !== null}
 					/>
 					{#if projectNameError}
@@ -69,10 +69,10 @@
 				</fieldset>
 				<fieldset class="fieldset">
 					<legend class="fieldset-legend">Directory</legend>
-					<div class="flex join">
+					<div class="join flex">
 						<input
 							type="text"
-							class="input flex-1 join-item border-r-0 cursor-default bg-base-300"
+							class="input join-item bg-base-300 flex-1 cursor-default border-r-0"
 							placeholder="No directory selected..."
 							bind:value={selectedDirectory}
 							required
@@ -83,7 +83,7 @@
 				</fieldset>
 				<fieldset class="fieldset">
 					<legend class="fieldset-legend">Project Type</legend>
-					<select bind:value={projectType} class="select w-full bg-base-300 appearance-none">
+					<select bind:value={projectType} class="select bg-base-300 w-full appearance-none">
 						<option value={ProjectType.YARNSPINNER}>Yarn Spinner</option>
 						<option value={ProjectType.CHATTERBOX}>Chatterbox</option>
 					</select>

@@ -13,11 +13,7 @@
 		"editor.defaultFormatter": "esbenp.prettier-vscode",
 		"typescript.validate.enable": false
 	},
-	"eslint.validate": [
-		"javascript",
-		"typescript",
-		"svelte"
-	],
+	"eslint.validate": ["javascript", "typescript", "svelte"],
 	"editor.codeActionsOnSave": {
 		"source.fixAll.eslint": "explicit"
 	},

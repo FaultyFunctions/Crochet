@@ -22,5 +22,5 @@
 		<span class="w-4 shrink-0"></span>
 		<Icon icon="mdi:file-document-outline" class="shrink-0 opacity-70" />
 	{/if}
-	<span class="truncate min-w-0 flex-1">{treeRow.name}</span>
+	<span class="min-w-0 flex-1 truncate">{treeRow.name}</span>
 </button>

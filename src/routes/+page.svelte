@@ -18,10 +18,10 @@
 		<Pane defaultSize={40} class="h-full">
 			<Sidebar />
 		</Pane>
-		<PaneResizer class="relative w-0 overflow-visible group">
+		<PaneResizer class="group relative w-0 overflow-visible">
 			<div
-				class="absolute inset-y-0 -translate-x-1 w-1 bg-neutral opacity-0
-				group-hover:opacity-100 group-data-active:opacity-100 transition delay-150 z-10"
+				class="bg-neutral absolute inset-y-0 z-10 w-1 -translate-x-1
+				opacity-0 transition delay-150 group-hover:opacity-100 group-data-active:opacity-100"
 			></div>
 		</PaneResizer>
 		<Pane>

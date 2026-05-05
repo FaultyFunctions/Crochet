@@ -65,7 +65,7 @@
 </script>
 
 <!-- # MARKUP # -->
-<div class="flex flex-col h-full">
+<div class="flex h-full flex-col">
 	<WorkspaceTabHolder />
 	<div class="flex-1">
 		<SvelteFlow bind:nodes bind:edges {...svelteFlowConfig}>
@@ -112,10 +112,10 @@
 	}
 
 	:global(.svelte-flow__controls-button svg) {
-		@apply size-6! max-w-none! max-h-none!;
+		@apply size-6! max-h-none! max-w-none!;
 	}
 
 	:global(.defaultControl .svelte-flow__controls-button svg) {
-		@apply size-5! max-w-none! max-h-none!;
+		@apply size-5! max-h-none! max-w-none!;
 	}
 </style>
