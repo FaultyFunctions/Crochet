@@ -1,10 +1,10 @@
-import svelteConfig from './svelte.config.js';
+import js from '@eslint/js';
+import prettier from 'eslint-config-prettier';
+import svelte from 'eslint-plugin-svelte';
 import { defineConfig } from 'eslint/config';
 import globals from 'globals';
-import js from '@eslint/js';
 import ts from 'typescript-eslint';
-import svelte from 'eslint-plugin-svelte';
-import prettier from 'eslint-config-prettier';
+import svelteConfig from './svelte.config.js';
 
 export default defineConfig(
 	{
@@ -37,6 +37,7 @@ export default defineConfig(
 		rules: {
 			'no-unused-vars': 'off',
 			'@typescript-eslint/no-unused-vars': 'off',
+			'no-unused-private-class-members': 'off',
 			'svelte/no-target-blank': 'error',
 			'svelte/block-lang': [
 				'error',
@@ -54,9 +55,9 @@ export default defineConfig(
 			'svelte/spaced-html-comment': ['error', 'always'],
 			'no-trailing-spaces': 'off',
 			'svelte/no-trailing-spaces': [
-				'error',
+				'warn',
 				{
-					skipBlankLines: false,
+					skipBlankLines: true,
 					ignoreComments: false
 				}
 			]

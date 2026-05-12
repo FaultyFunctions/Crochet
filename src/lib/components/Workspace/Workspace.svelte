@@ -1,7 +1,6 @@
 <!-- SCRIPT -->
 <script lang="ts">
 	import WorkspaceTabHolder from '$lib/components/Workspace/WorkspaceTabHolder.svelte';
-	import Icon from '@iconify/svelte';
 	import {
 		SvelteFlow,
 		MiniMap,
@@ -13,6 +12,14 @@
 		ControlButton
 	} from '@xyflow/svelte';
 	import '@xyflow/svelte/dist/base.css';
+	import {
+		AlignStartVerticalIcon,
+		AlignEndVerticalIcon,
+		AlignStartHorizontalIcon,
+		AlignEndHorizontalIcon,
+		ZoomInIcon,
+		ZoomOutIcon
+	} from '@lucide/svelte';
 
 	const svelteFlowConfig: SvelteFlowProps = {
 		nodesConnectable: false,
@@ -73,24 +80,24 @@
 			<MiniMap {...miniMapProps} />
 			<Controls {...sortControlProps}>
 				<ControlButton title="Align Left" aria-label="Align Left">
-					<Icon icon="ri:align-item-left-fill" />
+					<AlignStartVerticalIcon />
 				</ControlButton>
 				<ControlButton title="Align Right" aria-label="Align Right">
-					<Icon icon="ri:align-item-right-fill" />
+					<AlignEndVerticalIcon />
 				</ControlButton>
 				<ControlButton title="Align Top" aria-label="Align Top">
-					<Icon icon="ri:align-item-top-fill" />
+					<AlignStartHorizontalIcon />
 				</ControlButton>
 				<ControlButton title="Align Bottom" aria-label="Align Bottom">
-					<Icon icon="ri:align-item-bottom-fill" />
+					<AlignEndHorizontalIcon />
 				</ControlButton>
 			</Controls>
 			<Controls {...zoomControlProps}>
 				<ControlButton title="Zoom In" aria-label="Zoom In">
-					<Icon icon="ri:zoom-in-line" />
+					<ZoomInIcon class="fill-none!" />
 				</ControlButton>
 				<ControlButton title="Zoom Out" aria-label="Zoom Out">
-					<Icon icon="ri:zoom-out-line" />
+					<ZoomOutIcon />
 				</ControlButton>
 			</Controls>
 			<Controls {...defaultControlProps} />
@@ -112,10 +119,10 @@
 	}
 
 	:global(.svelte-flow__controls-button svg) {
-		@apply size-6! max-h-none! max-w-none!;
+		@apply size-6! max-h-none! max-w-none! fill-none!;
 	}
 
 	:global(.defaultControl .svelte-flow__controls-button svg) {
-		@apply size-5! max-h-none! max-w-none!;
+		@apply size-5! max-h-none! max-w-none! fill-current!;
 	}
 </style>

@@ -1,15 +1,15 @@
 <!-- SCRIPT -->
 <script lang="ts">
-	import Icon from '@iconify/svelte';
 	import { toasts } from '$lib/stores/toastStore.svelte';
 	import { fly } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
+	import { InfoIcon, CheckIcon, CircleAlertIcon, XIcon } from '@lucide/svelte';
 
 	const config = {
-		info: { class: 'alert-info', icon: 'pajamas-information' },
-		success: { class: 'alert-success', icon: 'pajamas-check-circle-filled' },
-		warning: { class: 'alert-warning', icon: 'pajamas-warning-solid' },
-		error: { class: 'alert-error', icon: 'pajamas-clear' }
+		info: { class: 'alert-info', icon: InfoIcon },
+		success: { class: 'alert-success', icon: CheckIcon },
+		warning: { class: 'alert-warning', icon: CircleAlertIcon },
+		error: { class: 'alert-error', icon: XIcon }
 	};
 </script>
 
@@ -19,13 +19,14 @@
 >
 	{#each toasts.value as toast (toast.id)}
 		{@const type = config[toast.type] || config.error}
+		{@const Icon = type.icon}
 		<div
 			animate:flip={{ duration: 300 }}
 			in:fly={{ y: -80, duration: 150 }}
 			out:fly={{ duration: 150 }}
 			class="alert {type.class} alert-soft pointer-events-auto"
 		>
-			<Icon icon={type.icon} class="-mr-2" width={16} />
+			<Icon class="-mr-2" width={16} />
 			<span>{toast.message}</span>
 		</div>
 	{/each}

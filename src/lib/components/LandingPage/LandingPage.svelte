@@ -1,8 +1,16 @@
 <!-- SCRIPT -->
 <script lang="ts">
-	import Icon from '@iconify/svelte';
 	import { Pane, PaneGroup } from 'paneforge';
 	import { projectStore } from '$lib/stores/projectStore.svelte';
+	import {
+		SettingsIcon,
+		PackagePlusIcon,
+		FolderOpenIcon,
+		LinkIcon,
+		CodeIcon,
+		BugIcon,
+		MessageSquareTextIcon
+	} from '@lucide/svelte';
 	import NewProjectModal from '$lib/components/LandingPage/NewProjectModal.svelte';
 
 	let newProjectDialog = $state<HTMLDialogElement>();
@@ -22,7 +30,7 @@
 						Crochet <span class="badge badge-soft badge-info">v1.0.0</span>
 					</span>
 
-					<button class="btn btn-soft btn-info"><Icon icon="pajamas:settings" class="text-base"></Icon>Settings</button>
+					<button class="btn btn-soft btn-info"><SettingsIcon class="size-5 text-base" />Settings</button>
 				</Pane>
 				<Pane defaultSize={90}>
 					<PaneGroup direction="horizontal" class="bg-base-100">
@@ -32,10 +40,10 @@
 									<h2 class="card-title">Start</h2>
 									<div class="flex flex-1 flex-col justify-center gap-2">
 										<button class="btn btn-block btn-primary" onclick={() => newProjectDialog?.showModal()}>
-											<Icon icon="pajamas:issue-new" class="text-base"></Icon>New Project
+											<PackagePlusIcon class="size-5 text-base" />New Project
 										</button>
 										<button class="btn btn-block btn-accent" onclick={projectStore.openProjectFile}>
-											<Icon icon="pajamas:folder-open" class="text-base"></Icon>Open Project
+											<FolderOpenIcon class="size-5 text-base" />Open Project
 										</button>
 									</div>
 								</Pane>
@@ -43,17 +51,17 @@
 									<h2 class="card-title">Reference</h2>
 									<div class="flex flex-1 flex-col items-start justify-center gap-2">
 										<a href={null}>
-											<Icon icon="pajamas:link" class="inline"></Icon> Getting Started
+											<LinkIcon class="inline size-4" /> Getting Started
 										</a>
 										<a
 											href="https://docs.yarnspinner.dev/write-yarn-scripts/scripting-fundamentals/lines-nodes-and-options"
 											target="_blank"
 											rel="noopener noreferrer"
 										>
-											<Icon icon="pajamas:link" class="inline"></Icon> Yarn Spinner Docs
+											<LinkIcon class="inline size-4" /> Yarn Spinner Docs
 										</a>
 										<a href="https://www.jujuadams.com/Chatterbox" target="_blank" rel="noopener noreferrer">
-											<Icon icon="pajamas:link" class="inline"></Icon> Chatterbox Docs
+											<LinkIcon class="inline size-4" /> Chatterbox Docs
 										</a>
 									</div>
 								</Pane>
@@ -61,16 +69,16 @@
 									<h2 class="card-title">Community</h2>
 									<div class="flex flex-1 flex-col items-start justify-center gap-2">
 										<a href={null}>
-											<Icon icon="pajamas:github" class="inline"></Icon> GitHub
+											<CodeIcon class="inline size-4" /> GitHub
 										</a>
 										<a href={null}>
-											<Icon icon="pajamas:bug" class="inline"></Icon> Report a Bug
+											<BugIcon class="inline size-4" /> Report a Bug
 										</a>
 										<a href={null}>
-											<Icon icon="pajamas:discord" class="inline"></Icon> Yarn Spinner Discord Server
+											<MessageSquareTextIcon class="inline size-4" /> Yarn Spinner Discord Server
 										</a>
 										<a href={null}>
-											<Icon icon="pajamas:discord" class="inline"></Icon> Chatterbox Discord Server
+											<MessageSquareTextIcon class="inline size-4" /> Chatterbox Discord Server
 										</a>
 									</div>
 								</Pane>

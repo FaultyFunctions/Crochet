@@ -11,9 +11,14 @@
 	"css.lint.unknownAtRules": "ignore",
 	"[svelte]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode",
-		"typescript.validate.enable": false
+		"typescript.validate.enable": false,
+		"editor.autoIndent": "advanced",
 	},
-	"eslint.validate": ["javascript", "typescript", "svelte"],
+	"eslint.validate": [
+		"javascript",
+		"typescript",
+		"svelte"
+	],
 	"editor.codeActionsOnSave": {
 		"source.fixAll.eslint": "explicit"
 	},

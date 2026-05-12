@@ -1,8 +1,8 @@
-import { invoke } from '@tauri-apps/api/core';
-import { addToast } from '$lib/stores/toastStore.svelte';
 import { PROJECT_FILE_VERSION } from '$lib/constants';
+import { explorerStore } from '$lib/stores/explorerStore.svelte';
+import { addToast } from '$lib/stores/toastStore.svelte';
+import { invoke } from '@tauri-apps/api/core';
 import { z } from 'zod';
-import { fileTreeStore } from '$lib/stores/fileTreeStore.svelte';
 
 export enum ProjectState {
 	LANDING_PAGE = 'LANDING_PAGE',
@@ -41,7 +41,7 @@ class ProjectStore {
 			});
 
 			this.config = config;
-			await fileTreeStore.initialize(config.path);
+			await explorerStore.initialize(config.path);
 			this.state = ProjectState.PROJECT_OPEN;
 		} catch (err) {
 			addToast(String(err), 'error');
@@ -56,7 +56,7 @@ class ProjectStore {
 			const config = ProjectConfigSchema.parse(JSON.parse(data));
 
 			this.config = config;
-			await fileTreeStore.initialize(config.path);
+			await explorerStore.initialize(config.path);
 			this.state = ProjectState.PROJECT_OPEN;
 		} catch (err) {
 			addToast(String(err), 'error');
@@ -65,7 +65,7 @@ class ProjectStore {
 
 	close = (): void => {
 		this.config = null;
-		fileTreeStore.reset();
+		explorerStore.reset();
 		this.state = ProjectState.LANDING_PAGE;
 	};
 }

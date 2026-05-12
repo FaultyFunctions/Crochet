@@ -23,5 +23,6 @@ tauri-plugin-opener = "2.5"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tauri-plugin-dialog = "2.7"
-tauri-plugin-fs = "2.5"
+tauri-plugin-fs = { version = "2.5", features = ["watch"] }
 tokio = { version = "1", features = ["fs"] }
+tauri-plugin-os = "2"

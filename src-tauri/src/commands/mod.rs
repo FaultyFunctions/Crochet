@@ -1,2 +1,2 @@
-pub mod file_tree;
+pub mod explorer;
 pub mod project;

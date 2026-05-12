@@ -5,8 +5,10 @@
 }
 
 @theme inline {
+	--color-base-0: oklch(from var(--color-base-100) calc(l + 0.20) c h);
 	--color-base-400: oklch(from var(--color-base-300) calc(l * 0.94) c h);
 	--color-base-500: oklch(from var(--color-base-400) calc(l * 0.94) c h);
+	--color-base-600: oklch(from var(--color-base-500) calc(l * 0.94) c h);
 }
 
 @utility bg-base-400 {
@@ -17,7 +19,12 @@
 	background-color: var(--color-base-500);
 }
 
+@utility bg-base-600 {
+	background-color: var(--color-base-600);
+}
+
 .tooltip::before,
 .tooltip::after {
 	transition-delay: 500ms;
+	z-index: 100;
 }

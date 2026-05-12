@@ -1,5 +1,6 @@
 use std::path::Path;
 use tauri::Manager;
+use tauri_plugin_fs::FsExt;
 
 fn main_window(app: &tauri::AppHandle) -> tauri::WebviewWindow {
     app.get_webview_window("main").unwrap()
@@ -22,11 +23,18 @@ pub async fn pick_directory(app: tauri::AppHandle) -> Option<String> {
 }
 
 #[tauri::command]
-pub fn create_project_file(name: &str, path: &str, config: serde_json::Value) -> Result<(), String> {
+pub fn create_project_file(
+    name: &str,
+    path: &str,
+    config: serde_json::Value,
+) -> Result<(), String> {
     let project_file = Path::new(path).join(format!("{}.crochet", name));
 
     if project_file.exists() {
-        return Err(format!("A project named '{}', already exists in that directory.", name));
+        return Err(format!(
+            "A project named '{}', already exists in that directory.",
+            name
+        ));
     }
 
     let content = serde_json::to_string_pretty(&config).map_err(|e| e.to_string())?;
@@ -41,7 +49,7 @@ pub async fn open_project_file(app: tauri::AppHandle) -> Result<Option<String>, 
 
     let window = main_window(&app);
     let (tx, rx) = std::sync::mpsc::channel();
-    
+
     app.dialog()
         .file()
         .set_title("Open Project File")
@@ -50,14 +58,25 @@ pub async fn open_project_file(app: tauri::AppHandle) -> Result<Option<String>, 
         .pick_file(move |file| {
             tx.send(file).unwrap();
         });
-    
+
     let file = rx.recv().unwrap();
-    
+
     match file {
         None => Ok(None),
         Some(path) => {
-            let contents = std::fs::read_to_string(path.to_string())
-                .map_err(|e| e.to_string())?;
+            let path_buf = path
+                .as_path()
+                .ok_or_else(|| "Invalid Path".to_string())?
+                .to_path_buf();
+
+            if let Some(project_dir) = path_buf.parent() {
+                app.fs_scope()
+                    .allow_directory(project_dir, true)
+                    .map_err(|e| e.to_string())?;
+            }
+
+            let contents = std::fs::read_to_string(&path_buf).map_err(|e| e.to_string())?;
+
             Ok(Some(contents))
         }
     }

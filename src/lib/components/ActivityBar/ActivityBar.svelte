@@ -1,39 +1,43 @@
 <!-- SCRIPT -->
 <script lang="ts">
-	import ActivityBarButton from '$lib/components/ActivityBar/ActivityBarButton.svelte';
-	import NewProjectButton from '$lib/components/ActivityBar/NewProjectButton.svelte';
+	import ExportButton from '$lib/components/ActivityBar/Buttons/ExportButton.svelte';
+	import HelpButton from '$lib/components/ActivityBar/Buttons/HelpButton.svelte';
+	import NewProjectButton from '$lib/components/ActivityBar/Buttons/NewProjectButton.svelte';
+	import OpenProjectButton from '$lib/components/ActivityBar/Buttons/OpenProjectButton.svelte';
+	import SectionButton from '$lib/components/ActivityBar/Buttons/SectionButton.svelte';
+	import SettingsButton from '$lib/components/ActivityBar/Buttons/SettingsButton.svelte';
+	import { FileCodeCornerIcon, SearchIcon } from '@lucide/svelte';
 
-	let projectIcon = 'pajamas:project';
-	let searchIcon = 'pajamas:search';
-	let openProjectIcon = 'pajamas:folder-open';
-	let exportIcon = 'pajamas:export';
-	let settingsIcon = 'pajamas:settings';
-	let infoIcon = 'pajamas:information-o';
-	let selectedSection = $state<string>(projectIcon);
+	const enum Section {
+		PROJECT = 'PROJECT',
+		SEARCH = 'SEARCH'
+	}
+
+	let selectedSection = $state<Section>(Section.PROJECT);
 </script>
 
 <!-- MARKUP -->
-<aside class="bg-base-100 flex h-screen w-12 flex-col items-center justify-between">
+<aside class="bg-base-600 flex h-screen w-12 flex-col items-center justify-between">
 	<div class="flex flex-col">
-		<ActivityBarButton
-			icon={projectIcon}
+		<SectionButton
+			IconComponent={FileCodeCornerIcon}
 			tooltip="Project"
-			selected={selectedSection}
-			onclick={() => (selectedSection = projectIcon)}
+			selected={selectedSection === Section.PROJECT}
+			onclick={() => (selectedSection = Section.PROJECT)}
 		/>
-		<ActivityBarButton
-			icon={searchIcon}
+		<SectionButton
+			IconComponent={SearchIcon}
 			tooltip="Search"
-			selected={selectedSection}
-			onclick={() => (selectedSection = searchIcon)}
+			selected={selectedSection === Section.SEARCH}
+			onclick={() => (selectedSection = Section.SEARCH)}
 		/>
 	</div>
 	<div class="flex flex-col items-center">
 		<NewProjectButton />
-		<ActivityBarButton icon={openProjectIcon} tooltip="Open Project" />
-		<ActivityBarButton icon={exportIcon} tooltip="Export" />
-		<ActivityBarButton icon={settingsIcon} tooltip="Settings" />
-		<ActivityBarButton icon={infoIcon} tooltip="Help" />
+		<OpenProjectButton />
+		<ExportButton />
+		<SettingsButton />
+		<HelpButton />
 	</div>
 </aside>
 
