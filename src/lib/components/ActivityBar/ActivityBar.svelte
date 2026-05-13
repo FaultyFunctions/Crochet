@@ -6,28 +6,28 @@
 	import OpenProjectButton from '$lib/components/ActivityBar/Buttons/OpenProjectButton.svelte';
 	import SectionButton from '$lib/components/ActivityBar/Buttons/SectionButton.svelte';
 	import SettingsButton from '$lib/components/ActivityBar/Buttons/SettingsButton.svelte';
-	import { FileCodeCornerIcon, SearchIcon } from '@lucide/svelte';
+	import { FolderTreeIcon, SearchIcon } from '@lucide/svelte';
 
 	const enum Section {
-		PROJECT = 'PROJECT',
+		EXPLORER = 'EXPLORER',
 		SEARCH = 'SEARCH'
 	}
 
-	let selectedSection = $state<Section>(Section.PROJECT);
+	let selectedSection = $state<Section>(Section.EXPLORER);
 </script>
 
 <!-- MARKUP -->
 <aside class="bg-base-600 flex h-screen w-12 flex-col items-center justify-between">
 	<div class="flex flex-col">
 		<SectionButton
-			IconComponent={FileCodeCornerIcon}
-			tooltip="Project"
-			selected={selectedSection === Section.PROJECT}
-			onclick={() => (selectedSection = Section.PROJECT)}
+			IconComponent={FolderTreeIcon}
+			tooltip="Explorer Panel"
+			selected={selectedSection === Section.EXPLORER}
+			onclick={() => (selectedSection = Section.EXPLORER)}
 		/>
 		<SectionButton
 			IconComponent={SearchIcon}
-			tooltip="Search"
+			tooltip="Search Panel"
 			selected={selectedSection === Section.SEARCH}
 			onclick={() => (selectedSection = Section.SEARCH)}
 		/>

@@ -2,14 +2,11 @@ import { addToast } from '$lib/stores/toastStore.svelte';
 import { invoke } from '@tauri-apps/api/core';
 import { watch, type UnwatchFn, type WatchEvent } from '@tauri-apps/plugin-fs';
 import { tick } from 'svelte';
-import { SvelteMap, SvelteSet } from 'svelte/reactivity';
+import { SvelteSet } from 'svelte/reactivity';
 
 class ExplorerStore {
 	#unwatch?: UnwatchFn;
 	#root = $state<ExplorerNode | undefined>();
-
-	#expanded = new SvelteSet<string>();
-	#selected = new SvelteSet<string>();
 
 	visibleRows = $derived.by(() => {
 		const rows: { node: ExplorerNode; depth: number }[] = [];
@@ -31,13 +28,14 @@ class ExplorerStore {
 			}
 		}
 
-		console.log(
-			'visibleRows recomputed',
-			rows.map((r) => r.node.name)
-		);
-
 		return rows;
 	});
+
+	#expanded = new SvelteSet<string>();
+	#selected = new SvelteSet<string>();
+	#lastSelected = $state<string | undefined>();
+	#focused = $state<string | undefined>();
+	#focusedIndex = $derived(this.visibleRows.findIndex((row) => row.node.path === this.#focused));
 
 	initialize = async (rootPath: string) => {
 		this.reset();
@@ -65,8 +63,35 @@ class ExplorerStore {
 		return this.#selected.has(node.path);
 	};
 
-	select = (node: ExplorerNode) => {
-		this.#selected.add(node.path);
+	select = (node: ExplorerNode, ctrl: boolean = false, shift: boolean = false) => {
+		if (shift && this.#lastSelected) {
+			const rows = this.visibleRows;
+			const lastIndex = rows.findIndex((row) => row.node.path === this.#lastSelected);
+			const currentIndex = rows.findIndex((row) => row.node.path === node.path);
+			const start = Math.min(lastIndex, currentIndex);
+			const end = Math.max(lastIndex, currentIndex);
+
+			for (let i = start; i <= end; i++) {
+				this.#selected.add(rows[i].node.path);
+			}
+		} else if (ctrl) {
+			if (this.#selected.has(node.path)) {
+				this.#selected.delete(node.path);
+			} else {
+				this.#selected.add(node.path);
+			}
+			this.#lastSelected = node.path;
+		} else {
+			this.#selected.clear();
+			this.#selected.add(node.path);
+			this.#lastSelected = node.path;
+		}
+
+		this.#focused = node.path;
+	};
+
+	clearSelection = () => {
+		this.#selected.clear();
 	};
 
 	isExpanded = (node: ExplorerNode) => {
@@ -83,6 +108,67 @@ class ExplorerStore {
 			}
 			this.#expanded.add(node.path);
 		}
+	};
+
+	isFocused = (node: ExplorerNode) => {
+		return this.#focused === node.path;
+	};
+
+	focus = (node: ExplorerNode) => {
+		this.#focused = node.path;
+	};
+
+	focusNext = () => {
+		const next = this.visibleRows[this.#focusedIndex + 1];
+		if (next) this.focus(next.node);
+	};
+
+	focusPrev = () => {
+		const prev = this.visibleRows[this.#focusedIndex - 1];
+		if (prev) this.focus(prev.node);
+	};
+
+	activateFocused = () => {
+		const current = this.visibleRows[this.#focusedIndex];
+		if (!current) return;
+		if (current.node.isDirectory) {
+			this.expandToggle(current.node);
+		} else {
+			// TODO: OPEN FILE IN WORKSPACE AND SEND FOCUS
+		}
+	};
+
+	expandFocused = () => {
+		const current = this.visibleRows[this.#focusedIndex];
+		if (current?.node.isDirectory && !this.isExpanded(current.node)) {
+			this.expandToggle(current.node);
+		}
+	};
+
+	collapseFocused = () => {
+		const current = this.visibleRows[this.#focusedIndex];
+		if (current?.node.isDirectory && this.isExpanded(current.node)) {
+			this.expandToggle(current.node);
+		} else {
+			// Send focus to parent folder
+			if (current.node.parent?.path !== this.#root?.path && current.node.parent) {
+				this.focus(current.node.parent);
+			}
+		}
+	};
+
+	focusFirst = () => {
+		const first = this.visibleRows[0];
+		if (first) this.focus(first.node);
+	};
+
+	focusLast = () => {
+		const last = this.visibleRows[this.visibleRows.length - 1];
+		if (last) this.focus(last.node);
+	};
+
+	clearFocus = () => {
+		this.#focused = undefined;
 	};
 
 	reset = () => {
@@ -169,3 +255,5 @@ class ExplorerNode {
 		return this === this.root;
 	}
 }
+
+class SelectionManager {}

@@ -15,7 +15,7 @@
 	</Pane>
 	<PaneResizer class="group relative w-0 overflow-visible">
 		<div
-			class="bg-neutral absolute inset-y-0 z-10 w-1 -translate-x-1
+			class="bg-neutral absolute inset-y-0 z-10 w-2 -translate-x-1
 				opacity-0 transition delay-150 group-hover:opacity-100 group-data-active:opacity-100"
 		></div>
 	</PaneResizer>

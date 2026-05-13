@@ -23,8 +23,13 @@
 	background-color: var(--color-base-600);
 }
 
+body {
+	backface-visibility: hidden;
+	-webkit-backface-visibility: hidden;
+}
+
 .tooltip::before,
 .tooltip::after {
-	transition-delay: 500ms;
+	transition-delay: 250ms;
 	z-index: 100;
 }

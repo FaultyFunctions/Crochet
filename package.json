@@ -29,6 +29,7 @@
 		"zod": "^4.4.1"
 	},
 	"devDependencies": {
+		"@svelte-put/shortcut": "^4.1.0",
 		"@sveltejs/adapter-static": "^3.0.10",
 		"@sveltejs/kit": "^2.58.0",
 		"@sveltejs/vite-plugin-svelte": "^5.0.0",
