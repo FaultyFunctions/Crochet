@@ -14,7 +14,8 @@
 		}
 	};
 
-	const shortcuts: ShortcutParameter = {
+	const shortcuts = $derived<ShortcutParameter>({
+		enabled: !explorerStore.isAnyRenaming(),
 		trigger: [
 			{ key: 'Enter', modifier: false, preventDefault: true, callback: () => explorerStore.activateFocused() },
 			{ key: ' ', modifier: false, preventDefault: true, callback: () => explorerStore.activateFocused() },
@@ -45,9 +46,10 @@
 			{ key: 'ArrowRight', modifier: false, preventDefault: true, callback: () => explorerStore.expandFocused() },
 			{ key: 'ArrowLeft', modifier: false, preventDefault: true, callback: () => explorerStore.collapseFocused() },
 			{ key: 'Home', modifier: false, preventDefault: true, callback: () => explorerStore.focusFirst() },
-			{ key: 'End', modifier: false, preventDefault: true, callback: () => explorerStore.focusLast() }
+			{ key: 'End', modifier: false, preventDefault: true, callback: () => explorerStore.focusLast() },
+			{ key: 'F2', modifier: false, preventDefault: true, callback: () => explorerStore.startRename() }
 		]
-	};
+	});
 </script>
 
 <!-- MARKUP -->
