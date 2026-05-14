@@ -47,7 +47,9 @@
 			{ key: 'ArrowLeft', modifier: false, preventDefault: true, callback: () => explorerStore.collapseFocused() },
 			{ key: 'Home', modifier: false, preventDefault: true, callback: () => explorerStore.focusFirst() },
 			{ key: 'End', modifier: false, preventDefault: true, callback: () => explorerStore.focusLast() },
-			{ key: 'F2', modifier: false, preventDefault: true, callback: () => explorerStore.startRename() }
+			{ key: 'F2', modifier: false, preventDefault: true, callback: () => explorerStore.startRename() },
+			{ key: 'z', modifier: 'ctrl', preventDefault: true, callback: () => explorerStore.undo() },
+			{ key: 'y', modifier: 'ctrl', preventDefault: true, callback: () => explorerStore.redo() }
 		]
 	});
 </script>
@@ -63,12 +65,13 @@
 	role="tree"
 	tabindex="0"
 	id="explorer"
+	aria-multiselectable="true"
 	class="h-full overflow-y-auto outline-none"
 	onclick={handleClick}
 	use:shortcut={shortcuts}
 >
 	{#each explorerStore.visibleRows as { node, depth } (node.path)}
-		<Row {node} {depth} {explorerElement} />
+		<Row {node} {depth} />
 	{/each}
 </div>
 

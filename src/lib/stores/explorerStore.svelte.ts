@@ -1,11 +1,14 @@
 // TODO: Make folders stay expanded when renamed
 
 import { addToast } from '$lib/stores/toastStore.svelte';
+import { CommandHistory, type Command } from '$lib/utils/CommandHistory.svelte';
 import { invoke } from '@tauri-apps/api/core';
 import { dirname, join, sep } from '@tauri-apps/api/path';
 import { watch, type UnwatchFn, type WatchEvent } from '@tauri-apps/plugin-fs';
 import { tick } from 'svelte';
 import { SvelteMap, SvelteSet } from 'svelte/reactivity';
+
+export type IExplorerNode = InstanceType<typeof ExplorerNode>;
 
 type NormalizedWatchEvent =
 	| { kind: 'create'; path: string; isDirectory: boolean }
@@ -13,9 +16,26 @@ type NormalizedWatchEvent =
 	| { kind: 'rename'; path: string; newPath: string }
 	| { kind: 'other' };
 
+interface ExplorerNodeInitialData {
+	path: string;
+	name: string;
+	isDirectory: boolean;
+}
+
 class ExplorerStore {
 	#unwatch?: UnwatchFn;
 	#root = $state<ExplorerNode | undefined>();
+	#history = new CommandHistory();
+
+	undo = this.#history.undo;
+	redo = this.#history.redo;
+
+	get canUndo() {
+		return this.#history.canUndo;
+	}
+	get canRedo() {
+		return this.#history.canRedo;
+	}
 
 	visibleRows = $derived.by(() => {
 		const rows: { node: ExplorerNode; depth: number }[] = [];
@@ -43,6 +63,9 @@ class ExplorerStore {
 	#selected = new SvelteSet<string>();
 	#lastSelected = $state<string | undefined>();
 	#focused = $state<string | undefined>();
+	get focusedID(): string | undefined {
+		return this.#focused;
+	}
 	#focusedIndex = $derived(this.visibleRows.findIndex((row) => row.node.path === this.#focused));
 	#renaming = $state<string | undefined>();
 
@@ -57,8 +80,6 @@ class ExplorerStore {
 			this.#root = new ExplorerNode(initialData);
 			await this.#loadChildren(this.#root);
 			await tick();
-
-			this.#expanded.add(rootPath);
 
 			this.#unwatch = await watch(rootPath, this.#handleWatcherEvents, {
 				recursive: true
@@ -149,8 +170,13 @@ class ExplorerStore {
 
 	expandFocused = (): void => {
 		const current = this.visibleRows[this.#focusedIndex];
-		if (current?.node.isDirectory && !this.isExpanded(current.node)) {
-			this.expandToggle(current.node);
+		if (current?.node.isDirectory) {
+			if (this.isExpanded(current.node)) {
+				const firstChild = current.node.children.values().next().value;
+				if (firstChild) this.focus(firstChild);
+			} else {
+				this.expandToggle(current.node);
+			}
 		}
 	};
 
@@ -185,7 +211,6 @@ class ExplorerStore {
 	};
 
 	isAnyRenaming = (): boolean => {
-		console.log(this.#renaming !== undefined);
 		return this.#renaming !== undefined;
 	};
 
@@ -200,7 +225,6 @@ class ExplorerStore {
 	};
 
 	commitRename = async (node: ExplorerNode, newName: string): Promise<void> => {
-		console.log(newName);
 		if (!newName || newName === node.name) {
 			this.#renaming = undefined;
 			return;
@@ -213,17 +237,9 @@ class ExplorerStore {
 			const parentPath = await dirname(node.path);
 			const newPath = await join(parentPath, newName);
 
-			console.log('Test');
+			await this.#history.execute(new RenameCommand(this.#handleRename.bind(this), oldPath, newPath));
 
-			// Optimisitically update the tree
-			this.#handleRename(oldPath, newPath);
 			this.#renaming = undefined;
-
-			console.log(node.path, newPath);
-
-			await invoke('rename_explorer_node', { oldPath, newPath });
-
-			console.log('Test3');
 		} catch (err) {
 			// Revert renaming in case of error
 			this.#handleRename(node.path, oldPath);
@@ -282,7 +298,6 @@ class ExplorerStore {
 	};
 
 	#handleWatcherEvents = (e: WatchEvent): void => {
-		console.log(e);
 		const event = this.#normalizeWatchEvent(e);
 		switch (event.kind) {
 			case 'create':
@@ -292,7 +307,6 @@ class ExplorerStore {
 				//this.#handleRemove(event.path);
 				break;
 			case 'rename':
-				console.log(e);
 				this.#handleRename(event.path, event.newPath);
 				break;
 		}
@@ -308,6 +322,9 @@ class ExplorerStore {
 		if (this.#selected.has(oldPath)) {
 			this.#selected.delete(oldPath);
 			this.#selected.add(newPath);
+		}
+		if (this.#expanded.has(oldPath)) {
+			this.expandToggle(node);
 		}
 	};
 
@@ -328,14 +345,6 @@ class ExplorerStore {
 }
 
 export const explorerStore = new ExplorerStore();
-
-interface ExplorerNodeInitialData {
-	path: string;
-	name: string;
-	isDirectory: boolean;
-}
-
-export type IExplorerNode = InstanceType<typeof ExplorerNode>;
 
 class ExplorerNode {
 	path = $state<string>('');
@@ -400,5 +409,32 @@ class ExplorerNode {
 		this.path = newPath;
 		this.name = newName;
 		this.#parent?.addChild(this);
+	};
+}
+
+class RenameCommand implements Command {
+	#rename: (oldPath: string, newPath: string) => void;
+	#oldPath: string;
+	#newPath: string;
+
+	constructor(rename: (oldPath: string, newPath: string) => void, oldPath: string, newPath: string) {
+		this.#rename = rename;
+		this.#oldPath = oldPath;
+		this.#newPath = newPath;
+	}
+
+	execute = async (): Promise<void> => {
+		await invoke('rename_explorer_node', { oldPath: this.#oldPath, newPath: this.#newPath });
+		this.#rename(this.#oldPath, this.#newPath);
+	};
+
+	undo = async (): Promise<void> => {
+		await invoke('rename_explorer_node', { oldPath: this.#newPath, newPath: this.#oldPath });
+		this.#rename(this.#newPath, this.#oldPath);
+	};
+
+	redo = async (): Promise<void> => {
+		await invoke('rename_explorer_node', { oldPath: this.#oldPath, newPath: this.#oldPath });
+		this.#rename(this.#oldPath, this.#newPath);
 	};
 }
