@@ -68,6 +68,11 @@
 	aria-multiselectable="true"
 	class="h-full overflow-y-auto outline-none"
 	onclick={handleClick}
+	onfocusout={(e: FocusEvent) => {
+		if (!explorerElement?.contains(e.relatedTarget as Node)) {
+			explorerStore.clearFocus();
+		}
+	}}
 	use:shortcut={shortcuts}
 >
 	{#each explorerStore.visibleRows as { node, depth } (node.path)}
