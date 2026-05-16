@@ -17,7 +17,7 @@
 </script>
 
 <!-- MARKUP -->
-<aside class="bg-base-600 flex h-screen w-12 flex-col items-center justify-between">
+<aside class="bg-base-200 flex h-screen w-12 flex-col items-center justify-between">
 	<div class="flex flex-col">
 		<SectionButton
 			IconComponent={FolderTreeIcon}

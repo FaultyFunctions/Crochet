@@ -6,7 +6,7 @@
 </script>
 
 <!-- MARKUP -->
-<div class="h-screen">
+<div class="h-screen w-screen">
 	{@render children()}
 </div>
 

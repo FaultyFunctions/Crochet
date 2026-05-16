@@ -12,7 +12,6 @@
 	const isRenaming = $derived(explorerStore.isRenaming(node));
 	const fileExtension = projectStore.config?.projectType === ProjectType.YARNSPINNER ? '.yarn' : '.chatter';
 
-	// TODO: Check this warning out
 	let buttonElement = $state<HTMLButtonElement | undefined>();
 	let inputElement = $state<HTMLInputElement | undefined>();
 	let inputValue = $derived.by(() => {
@@ -63,7 +62,7 @@
 		}
 	};
 
-	const shortcuts: ShortcutParameter = {
+	const renameShortcuts: ShortcutParameter = {
 		trigger: [
 			{
 				key: 'Enter',
@@ -87,7 +86,7 @@
 	class="explorer-row hover:not-selected:bg-base-100 flex w-full cursor-pointer items-center pl-1 select-none"
 	class:selected={isSelected}
 	class:focused={isFocused}
-	// class:bg-base-100={isSelected}
+	class:selected-dimmed={isSelected && !explorerStore.isActive}
 	title={node.path}
 	onclick={handleClick}
 >
@@ -101,7 +100,7 @@
 				type="text"
 				bind:value={inputValue}
 				onblur={() => explorerStore.cancelRename()}
-				use:shortcut={shortcuts}
+				use:shortcut={renameShortcuts}
 				class=" bg-base-600 field-sizing-content min-w-8 px-4"
 			/>
 			<div class="tooltip tooltip-open tooltip-right" data-tip="Testing 123"></div>
@@ -112,7 +111,7 @@
 			{/if}
 		</div>
 	{:else}
-		<span class="row-title truncate pl-1">{node.name} - {depth}</span>
+		<span class="row-title truncate pl-1">{node.name}</span>
 	{/if}
 </button>
 
@@ -135,7 +134,11 @@
 		@apply bg-base-100 inset-ring-1;
 	}
 
-	.explorer-row.selected {
+	.explorer-row.selected:not(selected-dimmed) {
 		@apply bg-base-0;
+	}
+
+	.explorer-row.selected.selected-dimmed {
+		@apply bg-base-100;
 	}
 </style>

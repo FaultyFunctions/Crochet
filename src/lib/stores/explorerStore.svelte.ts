@@ -23,19 +23,11 @@ interface ExplorerNodeInitialData {
 }
 
 class ExplorerStore {
+	isActive = $state<boolean>(false);
+
 	#unwatch?: UnwatchFn;
 	#root = $state<ExplorerNode | undefined>();
 	#history = new CommandHistory();
-
-	undo = this.#history.undo;
-	redo = this.#history.redo;
-
-	get canUndo() {
-		return this.#history.canUndo;
-	}
-	get canRedo() {
-		return this.#history.canRedo;
-	}
 
 	visibleRows = $derived.by(() => {
 		const rows: { node: ExplorerNode; depth: number }[] = [];
@@ -63,11 +55,25 @@ class ExplorerStore {
 	#selected = new SvelteSet<string>();
 	#lastSelected = $state<string | undefined>();
 	#focused = $state<string | undefined>();
+	#focusedIndex = $derived(this.visibleRows.findIndex((row) => row.node.path === this.#focused));
+	#renaming = $state<string | undefined>();
+
+	selectedCount = $derived(this.#selected.size);
+
+	undo = this.#history.undo;
+	redo = this.#history.redo;
+
+	get canUndo() {
+		return this.#history.canUndo;
+	}
+
+	get canRedo() {
+		return this.#history.canRedo;
+	}
+
 	get focusedID(): string | undefined {
 		return this.#focused;
 	}
-	#focusedIndex = $derived(this.visibleRows.findIndex((row) => row.node.path === this.#focused));
-	#renaming = $state<string | undefined>();
 
 	initialize = async (rootPath: string): Promise<void> => {
 		this.reset();
@@ -164,7 +170,7 @@ class ExplorerStore {
 		if (current.node.isDirectory) {
 			this.expandToggle(current.node);
 		} else {
-			// TODO: OPEN FILE IN WORKSPACE AND SEND FOCUS
+			// TODO: OPEN FILE IN WORKSPACE
 		}
 	};
 

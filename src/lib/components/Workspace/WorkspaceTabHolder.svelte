@@ -3,7 +3,7 @@
 </script>
 
 <!-- MARKUP -->
-<div class="tabs bg-base-500">
+<div class="tabs bg-base-400">
 	<input
 		type="radio"
 		name="workspace_tabs"
