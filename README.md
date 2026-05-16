@@ -6,6 +6,12 @@ Crochet is an interactive dialogue editor for game developers and writers. It is
 
 ---
 
+#### Crochet v1.0 Concept Mockup
+
+<img src=".github/media/Crochet Concept.png">
+
+---
+
 #### Looking for the legacy version?
 
 The old code has been moved to the [crochet-legacy](https://github.com/FaultyFunctions/Crochet/tree/crochet-legacy) branch.
