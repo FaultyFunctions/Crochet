@@ -6,18 +6,19 @@
 	import OpenProjectButton from '$lib/components/ActivityBar/Buttons/OpenProjectButton.svelte';
 	import SectionButton from '$lib/components/ActivityBar/Buttons/SectionButton.svelte';
 	import SettingsButton from '$lib/components/ActivityBar/Buttons/SettingsButton.svelte';
-	import { FolderTreeIcon, SearchIcon } from '@lucide/svelte';
+	import { ChartNoAxesCombinedIcon, FolderTreeIcon, SearchIcon } from '@lucide/svelte';
 
 	const enum Section {
 		EXPLORER = 'EXPLORER',
-		SEARCH = 'SEARCH'
+		SEARCH = 'SEARCH',
+		STATS = 'STATS'
 	}
 
 	let selectedSection = $state<Section>(Section.EXPLORER);
 </script>
 
 <!-- MARKUP -->
-<aside class="bg-base-200 flex h-screen w-12 flex-col items-center justify-between">
+<aside class="bg-base-100 flex h-screen w-12 flex-col items-center justify-between">
 	<div class="flex flex-col">
 		<SectionButton
 			IconComponent={FolderTreeIcon}
@@ -30,6 +31,12 @@
 			tooltip="Search Panel"
 			selected={selectedSection === Section.SEARCH}
 			onclick={() => (selectedSection = Section.SEARCH)}
+		/>
+		<SectionButton
+			IconComponent={ChartNoAxesCombinedIcon}
+			tooltip="Statistics Panel"
+			selected={selectedSection === Section.STATS}
+			onclick={() => (selectedSection = Section.STATS)}
 		/>
 	</div>
 	<div class="flex flex-col items-center">

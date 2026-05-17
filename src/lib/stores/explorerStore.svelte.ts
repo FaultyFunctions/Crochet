@@ -231,8 +231,10 @@ class ExplorerStore {
 	};
 
 	commitRename = async (node: ExplorerNode, newName: string): Promise<void> => {
-		if (!newName || newName === node.name) {
-			this.#renaming = undefined;
+		const fileExtension = node.isDirectory ? '' : node.name.slice(node.name.lastIndexOf('.'));
+		const finalName = newName.concat(fileExtension);
+		if (this.getNameError(newName) !== undefined || finalName === node.name) {
+			this.cancelRename();
 			return;
 		}
 
@@ -241,7 +243,7 @@ class ExplorerStore {
 		try {
 			// Construct new path
 			const parentPath = await dirname(node.path);
-			const newPath = await join(parentPath, newName);
+			const newPath = await join(parentPath, finalName);
 
 			await this.#history.execute(new RenameCommand(this.#handleRename.bind(this), oldPath, newPath));
 
@@ -253,7 +255,7 @@ class ExplorerStore {
 		}
 	};
 
-	validateName = (name: string): string | undefined => {
+	getNameError = (name: string): string | undefined => {
 		if (!name || name.trim() === '') return 'Name cannot be empty';
 		if (/[\\/:*?"<>|]/.test(name)) return 'Name contains invalid characters';
 		if (/[. ]$/.test(name)) return 'Name cannot end with a space or period';

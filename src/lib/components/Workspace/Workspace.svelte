@@ -72,7 +72,6 @@
 </script>
 
 <!-- MARKUP -->
-<!-- TODO: COME BACK TO FLEX-1 AND MIN-WIDTH 0 AND OVERFLOW-HIDDEN -->
 <div id="workspace-container" class="flex h-full w-full flex-col">
 	<WorkspaceTabHolder />
 	<div class="flex-1">

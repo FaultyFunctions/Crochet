@@ -6,7 +6,7 @@
 
 <!-- MARKUP -->
 <aside
-	class="bg-base-300 relative flex h-full shrink-0 flex-col overflow-hidden ease-out"
+	class="bg-base-400 relative flex h-full shrink-0 flex-col overflow-hidden ease-out"
 	class:transition-[width]={sidePanelStore.isTransitioning}
 	class:duration-150={sidePanelStore.isTransitioning}
 	style:width={`${sidePanelStore.getWidth()}px`}

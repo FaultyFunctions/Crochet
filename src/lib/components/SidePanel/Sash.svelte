@@ -35,13 +35,21 @@
 </script>
 
 <!-- MARKUP -->
-<button
-	id="side-panel-sash"
-	class="hover:bg-secondary data-[dragging=true]:bg-secondary bg-base-400 relative h-full w-1 cursor-ew-resize transition-colors delay-150 duration-250"
-	data-dragging={isDragging}
-	aria-label="Resize Side Panel"
-	onmousedown={handleMouseDown}
-></button>
+<div
+	class="bg-base-400 has-[:hover]:bg-secondary flex transition-colors delay-150 duration-250"
+	class:bg-secondary={isDragging}
+	class:bg-base-400={sidePanelStore.status === SidePanelStatus.COLLAPSED ||
+		sidePanelStore.status === SidePanelStatus.EXPANDED}
+>
+	<button
+		id="side-panel-sash"
+		class="hover:bg-secondary data-[dragging=true]:bg-secondary bg-base-100 relative mt-10 w-1 cursor-ew-resize pb-10 transition-colors delay-150 duration-250"
+		class:bg-base-400={sidePanelStore.status === SidePanelStatus.COLLAPSED}
+		data-dragging={isDragging}
+		aria-label="Resize Side Panel"
+		onmousedown={handleMouseDown}
+	></button>
+</div>
 {#if isDragging}
 	<div id="side-panel-sash-drag-overlay" class="fixed inset-0 z-50 cursor-ew-resize select-none"></div>
 {/if}

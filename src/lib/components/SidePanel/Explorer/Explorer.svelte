@@ -95,7 +95,7 @@
 	tabindex="0"
 	id="explorer"
 	aria-multiselectable="true"
-	class="h-full overflow-y-auto outline-none"
+	class="bg-base-200 h-full overflow-y-auto outline-none"
 	onclick={handleClick}
 	onfocusin={handleFocusGained}
 	onfocusout={handleFocusLost}
@@ -106,7 +106,7 @@
 	{/each}
 </div>
 <footer class="bg-base-400 sticky top-0 flex min-h-10 items-center px-3 whitespace-nowrap select-none">
-	<label class="input input-sm input-secondary input-ghost bg-base-200 inset-ring-base-100 flex-1 inset-ring-1">
+	<label class="input input-xs input-secondary input-ghost bg-base-200 inset-ring-base-100 flex-1 inset-ring-1">
 		<span class="label text-secondary text-sm"><SearchIcon class="size-4" />Search</span>
 		<input type="text" class="text-base" />
 	</label>
