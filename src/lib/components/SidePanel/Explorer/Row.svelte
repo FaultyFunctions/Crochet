@@ -125,20 +125,20 @@
 	<div class="row-indent pl-{depth * 4}"></div>
 	<RowIcons isDirectory={node.isDirectory} {isExpanded} />
 	{#if isRenaming}
-		<div class="relative mr-1 flex flex-1 flex-col">
+		<div class="relative mr-0.5 flex flex-1 flex-col">
 			<input
 				bind:this={inputElement}
 				type="text"
 				bind:value={inputValue}
 				onfocusout={handleInputFocusOut}
 				use:shortcut={renameShortcuts}
-				class="bg-base-600 validator w-full min-w-8 px-1"
+				class="bg-base-600 w-full min-w-8 px-1"
 				class:input-error={!!validationMessage}
 				spellcheck="false"
 			/>
 			{#if validationMessage}
 				<div
-					class="text-base-content bg-error-content outline-error text-strong absolute top-full -mt-0.5 w-full translate-y-1 cursor-default p-1 text-left align-middle text-sm outline-2"
+					class="text-base-content bg-error-content outline-error text-strong absolute top-full z-10 -mt-0.5 w-full translate-y-1 cursor-default p-1 text-left align-middle text-sm outline-2"
 				>
 					<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 					{@html validationMessage}

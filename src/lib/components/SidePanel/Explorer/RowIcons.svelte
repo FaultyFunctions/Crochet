@@ -1,6 +1,6 @@
 <!-- SCRIPT -->
 <script lang="ts">
-	import { ChevronRightIcon, ChevronDownIcon, FolderIcon, FolderOpenIcon, SpoolIcon } from '@lucide/svelte';
+	import { ChevronRightIcon, ChevronDownIcon, FolderIcon, FolderOpenIcon, FileCodeCornerIcon } from '@lucide/svelte';
 
 	const { isDirectory, isExpanded } = $props();
 </script>
@@ -17,7 +17,7 @@
 		{/if}
 	{:else}
 		<div class="row-twistie pl-4"></div>
-		<SpoolIcon class="row-icon ml-2 size-4" />
+		<FileCodeCornerIcon class="row-icon ml-2 size-4" />
 	{/if}
 </div>
 

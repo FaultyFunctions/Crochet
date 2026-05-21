@@ -92,7 +92,7 @@
 	tabindex="0"
 	id="explorer"
 	aria-multiselectable="true"
-	class="bg-base-200 h-full overflow-y-auto outline-none"
+	class="bg-base-200 h-full overflow-y-auto pt-1 outline-none"
 	onclick={handleClick}
 	onfocusin={handleFocusGained}
 	onfocusout={handleFocusLost}
