@@ -70,16 +70,16 @@
 		}
 	});
 
-	const cancelRename = async () => {
+	const cancelRename = () => {
 		explorerStore.cancelRename();
-		await tick();
-		explorerStore.select(node);
-		inputValue = node.name;
+		tick().then(() => {
+			explorerStore.select(node);
+			inputValue = node.name;
+		});
 	};
 
-	const commitRename = async () => {
-		await explorerStore.commitRename(node, inputValue);
-		explorerStore.select(node);
+	const commitRename = () => {
+		explorerStore.commitRename(node, inputValue).then(() => explorerStore.select(node));
 	};
 
 	const handleClick = (e: MouseEvent) => {
