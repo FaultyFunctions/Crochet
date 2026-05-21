@@ -9,15 +9,27 @@
 		LinkIcon,
 		CodeIcon,
 		BugIcon,
-		MessageSquareTextIcon
+		MessageSquareTextIcon,
+		InfoIcon
 	} from '@lucide/svelte';
 	import NewProjectModal from '$lib/components/LandingPage/NewProjectModal.svelte';
+	import AlphaWarningModal from '$lib/components/LandingPage/AlphaWarningModal.svelte';
+	import { onMount } from 'svelte';
 
 	let newProjectDialog = $state<HTMLDialogElement>();
+	let alphaWarningDialog = $state<HTMLDialogElement>();
+
+	onMount(() => {
+		/* TODO: CHECK DO NOT SHOW AGAIN CHECKBOX SETTING AND IF CHECKED, DON'T OPEN WARNING DIALOG.
+				 ALSO CHECK IF THIS IS AN ALPHA BUILD, IF NOT DON'T OPEN WARNING DIALOG. */
+		alphaWarningDialog?.showModal();
+		alphaWarningDialog?.blur();
+	});
 </script>
 
 <!-- MARKUP -->
 <NewProjectModal bind:dialog={newProjectDialog} />
+<AlphaWarningModal bind:dialog={alphaWarningDialog} />
 
 <div class="bg-base-400 flex h-screen w-full items-center justify-center select-none">
 	<div
@@ -26,9 +38,15 @@
 		<div class="class-body h-full w-full">
 			<PaneGroup direction="vertical">
 				<Pane defaultSize={10} class="flex items-center justify-between pr-8 pl-8">
-					<span class="text-2xl font-bold">
-						Crochet <span class="badge badge-soft badge-error">v1.0.0 ALPHA</span>
-					</span>
+					<div>
+						<span class="text-3xl font-bold">Crochet</span>
+						<button class="ml-4 cursor-pointer" onclick={() => alphaWarningDialog?.showModal()}>
+							<div class="badge badge-soft badge-warning -translate-y-1">
+								<InfoIcon class="size-[1em]" strokeWidth={3} />
+								<span class="text-base font-bold">v1.0.0-ALPHA.1</span>
+							</div>
+						</button>
+					</div>
 
 					<button class="btn btn-soft btn-info"><SettingsIcon class="size-5 text-base" />Settings</button>
 				</Pane>

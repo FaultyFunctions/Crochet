@@ -46,11 +46,12 @@
 
 <!-- MARKUP -->
 <dialog bind:this={dialog} class="modal" onclose={resetForm}>
-	<div class="modal-box select-none">
-		<h1 class="text-center text-2xl font-bold">Create New Project</h1>
-		<div class="divider"></div>
+	<div class="modal-box ring-base-300 p-0 ring-6 select-none">
+		<div class="bg-primary flex h-18 w-full items-center">
+			<h1 class="text-primary-content flex-1 text-center text-2xl font-bold">Create New Project</h1>
+		</div>
 
-		<form onsubmit={handleCreate}>
+		<form onsubmit={handleCreate} class="p-6">
 			<div class="flex flex-col gap-4">
 				<fieldset class="fieldset">
 					<legend class="fieldset-legend">Project Name</legend>
@@ -67,7 +68,7 @@
 					{/if}
 				</fieldset>
 				<fieldset class="fieldset">
-					<legend class="fieldset-legend">Directory</legend>
+					<legend class="fieldset-legend">Select Project Directory</legend>
 					<div class="join flex">
 						<input
 							type="text"
