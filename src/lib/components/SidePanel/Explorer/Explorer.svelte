@@ -2,7 +2,6 @@
 <script lang="ts">
 	import Row from '$lib/components/SidePanel/Explorer/Row.svelte';
 	import { explorerStore } from '$lib/stores/explorerStore.svelte';
-	import { projectStore } from '$lib/stores/projectStore.svelte';
 	import { CopyMinusIcon, CopyPlusIcon, SearchIcon } from '@lucide/svelte';
 	import { shortcut, type ShortcutParameter } from '@svelte-put/shortcut';
 
@@ -70,9 +69,7 @@
 
 <!-- MARKUP -->
 <header class="bg-base-400 sticky top-0 flex min-h-10 items-center pl-3 text-xs whitespace-nowrap select-none">
-	<div class="flex flex-1">
-		EXPLORER - {projectStore.config?.name}
-	</div>
+	<div class="flex flex-1">EXPLORER</div>
 	<div class="flex gap-1 pr-3">
 		<button
 			class="btn btn-square btn-ghost btn-xs btn-base-content tooltip tooltip-bottom z-100 rounded-none"

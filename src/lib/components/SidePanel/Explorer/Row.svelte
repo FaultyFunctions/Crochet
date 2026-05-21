@@ -2,34 +2,38 @@
 <script lang="ts">
 	import RowIcons from '$lib/components/SidePanel/Explorer/RowIcons.svelte';
 	import { explorerStore, type IExplorerNode } from '$lib/stores/explorerStore.svelte';
+	import { checkFileNameError } from '$lib/utils/validation';
 	import { shortcut, type ShortcutEventDetail, type ShortcutParameter } from '@svelte-put/shortcut';
+	import { tick } from 'svelte';
 
 	const { node, depth }: { node: IExplorerNode; depth: number } = $props();
 	const isExpanded = $derived(explorerStore.isExpanded(node));
 	const isSelected = $derived(explorerStore.isSelected(node));
 	const isFocused = $derived(explorerStore.isFocused(node));
 	const isRenaming = $derived(explorerStore.isRenaming(node));
-	const fileExtension = $derived(node.isDirectory ? '' : node.name.slice(node.name.lastIndexOf('.')));
 	const renameShortcuts: ShortcutParameter = {
 		trigger: [
 			{
 				key: 'Enter',
 				modifier: false,
 				preventDefault: true,
-				callback: (detail: ShortcutEventDetail) => {
+				callback: (detail: ShortcutEventDetail): void => {
 					detail.originalEvent.stopPropagation();
-					inputElement?.blur();
-					explorerStore.select(node);
+
+					if (inputValue === node.name) {
+						cancelRename();
+					} else if (validationMessage === null) {
+						commitRename();
+					}
 				}
 			},
 			{
 				key: 'Escape',
 				modifier: false,
 				preventDefault: true,
-				callback: (detail: ShortcutEventDetail) => {
+				callback: (detail: ShortcutEventDetail): void => {
 					detail.originalEvent.stopPropagation();
-					console.log(detail);
-					explorerStore.select(node);
+					cancelRename();
 				}
 			}
 		]
@@ -37,8 +41,8 @@
 
 	let buttonElement = $state<HTMLButtonElement | undefined>();
 	let inputElement = $state<HTMLInputElement | undefined>();
-	let inputValue = $derived(node.isDirectory ? node.name : node.name.substring(0, node.name.lastIndexOf('.')));
-	const validationMessage = $derived(explorerStore.getNameError(inputValue));
+	let inputValue = $derived(node.name);
+	const validationMessage = $derived(checkFileNameError(inputValue));
 
 	$effect(() => {
 		if (isFocused && buttonElement) {
@@ -66,6 +70,18 @@
 		}
 	});
 
+	const cancelRename = async () => {
+		explorerStore.cancelRename();
+		await tick();
+		explorerStore.select(node);
+		inputValue = node.name;
+	};
+
+	const commitRename = async () => {
+		await explorerStore.commitRename(node, inputValue);
+		explorerStore.select(node);
+	};
+
 	const handleClick = (e: MouseEvent) => {
 		if (explorerStore.isAnyRenaming()) return;
 
@@ -75,9 +91,19 @@
 		}
 	};
 
-	const handleInputBlur = () => {
-		console.log(inputValue);
-		explorerStore.commitRename(node, inputValue);
+	const handleInputFocusOut = async () => {
+		if (!explorerStore.isRenaming(node)) {
+			return;
+		} else if (validationMessage !== null) {
+			cancelRename();
+			return;
+		}
+
+		if (inputValue === node.name) {
+			cancelRename();
+		} else if (validationMessage === null) {
+			commitRename();
+		}
 	};
 </script>
 
@@ -89,7 +115,7 @@
 	aria-expanded={node.isDirectory ? isExpanded : undefined}
 	aria-selected={isSelected}
 	tabindex="-1"
-	class="explorer-row hover:not-selected:bg-base-100 flex w-full cursor-pointer items-center pl-1 select-none"
+	class="explorer-row hover:not-selected:bg-base-100 flex w-full cursor-pointer items-start pl-1 select-none"
 	class:selected={isSelected}
 	class:focused={isFocused}
 	class:selected-dimmed={isSelected && !explorerStore.isActive}
@@ -99,25 +125,31 @@
 	<div class="row-indent pl-{depth * 4}"></div>
 	<RowIcons isDirectory={node.isDirectory} {isExpanded} />
 	{#if isRenaming}
-		<!-- TODO: FIX OVERFLOW HIDDEN HERE -->
-		<div class="flex w-full">
+		<div class="relative mr-1 flex flex-1 flex-col">
 			<input
 				bind:this={inputElement}
 				type="text"
 				bind:value={inputValue}
-				onblur={handleInputBlur}
+				onfocusout={handleInputFocusOut}
 				use:shortcut={renameShortcuts}
-				class="bg-base-600 mr-1 ml-1 w-full min-w-8"
+				class="bg-base-600 validator w-full min-w-8 px-1"
+				class:input-error={!!validationMessage}
+				spellcheck="false"
 			/>
-			<div class="absolute top-4">Test 123</div>
-			<!-- TODO: CREATE VALIDATION ELEMENT AN POSITION IT PROPERLY -->
-			<!-- <div class="validator-hint absolute translate-y-4">THIS IS A TEST</div> -->
-			{#if !node.isDirectory}
-				<div class="mr-1 px-2 text-right">{fileExtension}</div>
+			{#if validationMessage}
+				<div
+					class="text-base-content bg-error-content outline-error text-strong absolute top-full -mt-0.5 w-full translate-y-1 cursor-default p-1 text-left align-middle text-sm outline-2"
+				>
+					<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+					{@html validationMessage}
+				</div>
 			{/if}
 		</div>
+		{#if !node.isDirectory}
+			<div class="mr-1 px-2 text-right">{explorerStore.fileExtension}</div>
+		{/if}
 	{:else}
-		<span class="row-title truncate pl-1">{node.name}</span>
+		<span class="row-title truncate pl-1">{node.name}{node.isDirectory ? '' : explorerStore.fileExtension}</span>
 	{/if}
 </button>
 
@@ -133,7 +165,11 @@
 	input:focus-visible,
 	input:focus {
 		outline: none;
-		@apply outline-accent outline-1;
+		@apply outline-base-0 outline-1;
+	}
+
+	.input-error {
+		@apply outline-error! outline-2!;
 	}
 
 	.explorer-row.focused {

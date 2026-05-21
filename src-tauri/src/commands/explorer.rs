@@ -1,7 +1,7 @@
 use serde::Serialize;
 use std::path::Path;
 
-const ALLOWED_EXTS: &[&str] = &["yarn", "chatter"];
+const ALLOWED_EXTS: &[&str] = &["chatter", "yarn"];
 
 fn is_allowed_file(path: &std::path::Path) -> bool {
     path.extension()

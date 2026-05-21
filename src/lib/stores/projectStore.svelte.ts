@@ -10,8 +10,8 @@ export enum ProjectState {
 }
 
 export enum ProjectType {
-	YARNSPINNER = 'YARNSPINNER',
-	CHATTERBOX = 'CHATTERBOX'
+	CHATTERBOX = 'CHATTERBOX',
+	YARNSPINNER = 'YARNSPINNER'
 }
 
 const InitialConfigSchema = z.object({
@@ -30,7 +30,7 @@ class ProjectStore {
 	config = $state<ProjectConfig | null>(null);
 	state = $state<ProjectState>(ProjectState.LANDING_PAGE);
 
-	initialize = async (initialConfig: InitialConfig): Promise<void> => {
+	createNewProject = async (initialConfig: InitialConfig): Promise<void> => {
 		const config = { fileVersion: PROJECT_FILE_VERSION, ...initialConfig };
 
 		try {
@@ -41,14 +41,14 @@ class ProjectStore {
 			});
 
 			this.config = config;
-			await explorerStore.initialize(config.path);
+			await explorerStore.initialize(config.path, config.projectType);
 			this.state = ProjectState.PROJECT_OPEN;
 		} catch (err) {
 			addToast(String(err), 'error');
 		}
 	};
 
-	openProjectFile = async (): Promise<void> => {
+	openExistingProject = async (): Promise<void> => {
 		try {
 			const data = await invoke<string | null>('open_project_file');
 			if (data === null) return;
@@ -56,7 +56,7 @@ class ProjectStore {
 			const config = ProjectConfigSchema.parse(JSON.parse(data));
 
 			this.config = config;
-			await explorerStore.initialize(config.path);
+			await explorerStore.initialize(config.path, config.projectType);
 			this.state = ProjectState.PROJECT_OPEN;
 		} catch (err) {
 			addToast(String(err), 'error');

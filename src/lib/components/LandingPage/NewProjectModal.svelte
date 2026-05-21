@@ -17,10 +17,8 @@
 	let projectType = $state<ProjectType>(ProjectType.YARNSPINNER);
 
 	// Validation
-	let projectNameError = $derived(checkProjectNameError(projectName));
-	let canCreate = $derived(
-		projectNameError === null && projectName.trim().length > 0 && projectType !== null && selectedDirectory != null
-	);
+	let projectNameError = $derived.by(() => checkProjectNameError(projectName));
+	let canCreate = $derived(projectNameError === null && projectType !== null && selectedDirectory != null);
 
 	const handleBrowseDirectory = async () => {
 		const directory = await invoke<string | null>('pick_directory');
@@ -32,7 +30,7 @@
 	const handleCreate = async (e: SubmitEvent) => {
 		e.preventDefault();
 
-		await projectStore.initialize({
+		await projectStore.createNewProject({
 			name: projectName,
 			path: selectedDirectory!,
 			projectType: projectType
@@ -55,7 +53,7 @@
 		<form onsubmit={handleCreate}>
 			<div class="flex flex-col gap-4">
 				<fieldset class="fieldset">
-					<legend class="fieldset-legend">Name</legend>
+					<legend class="fieldset-legend">Project Name</legend>
 					<input
 						type="text"
 						required
@@ -64,7 +62,8 @@
 						class:input-error={projectNameError !== null}
 					/>
 					{#if projectNameError}
-						<p class="fieldset-label text-error">{projectNameError}</p>
+						<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+						<p class="fieldset-label text-error">{@html projectNameError}</p>
 					{/if}
 				</fieldset>
 				<fieldset class="fieldset">

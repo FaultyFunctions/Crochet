@@ -43,7 +43,7 @@
 >
 	<button
 		id="side-panel-sash"
-		class="hover:bg-secondary data-[dragging=true]:bg-secondary bg-base-100 relative mt-10 w-1 cursor-ew-resize pb-10 transition-colors delay-150 duration-250"
+		class="hover:bg-secondary data-[dragging=true]:bg-secondary bg-base-100 relative my-10 w-1 cursor-ew-resize pb-10 transition-colors delay-150 duration-250"
 		class:bg-base-400={sidePanelStore.status === SidePanelStatus.COLLAPSED}
 		data-dragging={isDragging}
 		aria-label="Resize Side Panel"

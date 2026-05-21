@@ -1,5 +1,6 @@
 // TODO: Make folders stay expanded when renamed
 
+import { ProjectType } from '$lib/stores/projectStore.svelte';
 import { addToast } from '$lib/stores/toastStore.svelte';
 import { CommandHistory, type Command } from '$lib/utils/CommandHistory.svelte';
 import { invoke } from '@tauri-apps/api/core';
@@ -26,6 +27,7 @@ class ExplorerStore {
 	isActive = $state<boolean>(false);
 
 	#unwatch?: UnwatchFn;
+	#fileExtension?: string;
 	#root = $state<ExplorerNode | undefined>();
 	#history = new CommandHistory();
 
@@ -63,6 +65,10 @@ class ExplorerStore {
 	undo = this.#history.undo;
 	redo = this.#history.redo;
 
+	get fileExtension() {
+		return this.#fileExtension!;
+	}
+
 	get canUndo() {
 		return this.#history.canUndo;
 	}
@@ -75,8 +81,9 @@ class ExplorerStore {
 		return this.#focused;
 	}
 
-	initialize = async (rootPath: string): Promise<void> => {
+	initialize = async (rootPath: string, projectType: ProjectType): Promise<void> => {
 		this.reset();
+		this.#fileExtension = projectType === ProjectType.CHATTERBOX ? '.chatter' : '.yarn';
 
 		try {
 			// Grab root data from rust
@@ -85,7 +92,7 @@ class ExplorerStore {
 			// Create node and load root children
 			this.#root = new ExplorerNode(initialData);
 			await this.#loadChildren(this.#root);
-			await tick();
+			// await tick();
 
 			this.#unwatch = await watch(rootPath, this.#handleWatcherEvents, {
 				recursive: true
@@ -231,13 +238,12 @@ class ExplorerStore {
 	};
 
 	commitRename = async (node: ExplorerNode, newName: string): Promise<void> => {
-		const fileExtension = node.isDirectory ? '' : node.name.slice(node.name.lastIndexOf('.'));
-		const finalName = newName.concat(fileExtension);
-		if (this.getNameError(newName) !== undefined || finalName === node.name) {
+		if (this.getNameError(newName) !== undefined || newName === node.name) {
 			this.cancelRename();
 			return;
 		}
 
+		const finalName = node.isDirectory ? newName : newName.concat(this.fileExtension);
 		const oldPath = node.path;
 
 		try {
@@ -365,7 +371,7 @@ class ExplorerNode {
 
 	constructor(initialData: ExplorerNodeInitialData) {
 		this.path = initialData.path;
-		this.name = initialData.name;
+		this.name = initialData.name.split('.')[0];
 		this.#isDirectory = initialData.isDirectory;
 	}
 
@@ -411,7 +417,7 @@ class ExplorerNode {
 	}
 
 	rename = (newPath: string): void => {
-		const newName = newPath.split(sep()).pop()!;
+		const newName = newPath.split(sep()).pop()!.split('.')[0];
 
 		this.#parent?.removeChild(this);
 		this.path = newPath;

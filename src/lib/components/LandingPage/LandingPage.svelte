@@ -27,7 +27,7 @@
 			<PaneGroup direction="vertical">
 				<Pane defaultSize={10} class="flex items-center justify-between pr-8 pl-8">
 					<span class="text-2xl font-bold">
-						Crochet <span class="badge badge-soft badge-info">v1.0.0</span>
+						Crochet <span class="badge badge-soft badge-error">v1.0.0 ALPHA</span>
 					</span>
 
 					<button class="btn btn-soft btn-info"><SettingsIcon class="size-5 text-base" />Settings</button>
@@ -42,7 +42,7 @@
 										<button class="btn btn-block btn-primary" onclick={() => newProjectDialog?.showModal()}>
 											<PackagePlusIcon class="size-5 text-base" />New Project
 										</button>
-										<button class="btn btn-block btn-accent" onclick={projectStore.openProjectFile}>
+										<button class="btn btn-block btn-accent" onclick={projectStore.openExistingProject}>
 											<FolderOpenIcon class="size-5 text-base" />Open Project
 										</button>
 									</div>

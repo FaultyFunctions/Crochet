@@ -103,6 +103,7 @@
 			<Controls {...defaultControlProps} />
 		</SvelteFlow>
 	</div>
+	<WorkspaceTabHolder />
 </div>
 
 <!-- STYLE -->

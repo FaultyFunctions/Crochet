@@ -9,7 +9,7 @@
 	class="text-base-0 hover:text-base-content tooltip tooltip-right flex h-12 w-12 items-center justify-center hover:cursor-pointer"
 	data-tip="New Project"
 	onclick={() => {
-		projectStore.openProjectFile();
+		projectStore.openExistingProject();
 	}}
 >
 	<PackagePlusIcon />

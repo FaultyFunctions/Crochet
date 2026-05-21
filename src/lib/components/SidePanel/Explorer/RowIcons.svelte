@@ -6,7 +6,7 @@
 </script>
 
 <!-- MARKUP -->
-<div class="icon-wrapper flex shrink-0">
+<div class="icon-wrapper flex shrink-0 translate-y-1 pr-1">
 	{#if isDirectory}
 		{#if isExpanded}
 			<ChevronDownIcon class="row-twistie ml-1 size-4" />
