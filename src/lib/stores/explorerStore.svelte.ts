@@ -238,11 +238,6 @@ class ExplorerStore {
 	};
 
 	commitRename = async (node: ExplorerNode, newName: string): Promise<void> => {
-		if (this.getNameError(newName) !== undefined || newName === node.name) {
-			this.cancelRename();
-			return;
-		}
-
 		const finalName = node.isDirectory ? newName : newName.concat(this.fileExtension);
 		const oldPath = node.path;
 
