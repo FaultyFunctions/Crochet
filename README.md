@@ -1,8 +1,8 @@
 # Crochet - Interactive Dialogue Editor
 
-![GitHub milestone details](https://img.shields.io/github/milestones/progress-percent/FaultyFunctions/Crochet/1?style=flat-square&label=1.0.0%20Progress) ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/FaultyFunctions/Crochet/total?style=flat-square&label=Total%20Downloads) ![GitHub License](https://img.shields.io/github/license/FaultyFunctions/Crochet?label=License&style=flat-square)
+![GitHub milestone details](https://img.shields.io/github/milestones/progress-percent/FaultyFunctions/Crochet/1?style=flat-square&label=1.0.0%20Progress) ![GitHub License](https://img.shields.io/github/license/FaultyFunctions/Crochet?label=License&style=flat-square)
 
-Crochet is an interactive dialogue editor for game designers and writers. It is currently being rebuilt from the ground up using modern frameworks. There is no estimated time for release. Crochet will be compatible with both [Yarn Spinner Script](https://docs.yarnspinner.dev/write-yarn-scripts/scripting-fundamentals) and [ChatterScript](https://www.jujuadams.com/Chatterbox/#/3.3/).
+Crochet is an interactive dialogue editor that helps narrative designers create engaging stories as intuitively as possible. It is designed to be used with [Chatterbox](https://www.jujuadams.com/Chatterbox/) for the GameMaker engine and uses ChatterScript for authoring narrative. It's currently being rebuilt from the ground up using modern frameworks. There is no estimated time of release.
 
 ---
 
@@ -15,3 +15,7 @@ Crochet is an interactive dialogue editor for game designers and writers. It is 
 #### Looking for the legacy version?
 
 The old code has been moved to the [crochet-legacy](https://github.com/FaultyFunctions/Crochet/tree/crochet-legacy) branch.
+
+#### Wasn't Crochet compatible with Yarn Spinner?
+
+The legacy version of Crochet supported Yarn Spinner in the past because it was originally forked from a Yarn Script Editor, and ChatterScript very closely mirrored the Yarn Script syntax at the time so both compatible. Since then, new versions of both scripting languages have released and the official [Yarn Spinner VS Code extension](https://marketplace.visualstudio.com/items?itemName=SecretLab.yarn-spinner) has matured enough to be the recommended editor experience for developers using modern versions of Yarn Spinner. Maintaining compatibility with both would be too much work when the official VS Code extension already exists for Yarn Spinner.
