@@ -8,7 +8,7 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
-            commands::project::read_yarn_file,
+            commands::project::read_chatter_file,
             commands::project::pick_directory,
             commands::project::create_project_file,
             commands::project::open_project_file,

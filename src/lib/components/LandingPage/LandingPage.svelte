@@ -2,6 +2,7 @@
 <script lang="ts">
 	import { Pane, PaneGroup } from 'paneforge';
 	import { projectStore } from '$lib/stores/projectStore.svelte';
+	import { APP_VERSION, IS_ALPHA, IS_BETA, IS_STABLE } from '$lib/constants';
 	import {
 		SettingsIcon,
 		PackagePlusIcon,
@@ -22,9 +23,19 @@
 	onMount(() => {
 		/* TODO: CHECK DO NOT SHOW AGAIN CHECKBOX SETTING AND IF CHECKED, DON'T OPEN WARNING DIALOG.
 				 ALSO CHECK IF THIS IS AN ALPHA BUILD, IF NOT DON'T OPEN WARNING DIALOG. */
-		alphaWarningDialog?.showModal();
-		alphaWarningDialog?.blur();
+		if (IS_ALPHA) {
+			alphaWarningDialog?.showModal();
+			alphaWarningDialog?.blur();
+		}
 	});
+
+	const handleVersionClick = () => {
+		if (IS_ALPHA) {
+			alphaWarningDialog?.showModal();
+		} else if (IS_BETA) {
+			// betaWarningDialog?.showModal();
+		}
+	};
 </script>
 
 <!-- MARKUP -->
@@ -40,10 +51,17 @@
 				<Pane defaultSize={10} class="flex items-center justify-between pr-8 pl-8">
 					<div>
 						<span class="text-3xl font-bold">Crochet</span>
-						<button class="ml-4 cursor-pointer" onclick={() => alphaWarningDialog?.showModal()}>
-							<div class="badge badge-soft badge-warning -translate-y-1">
-								<InfoIcon class="size-[1em]" strokeWidth={3} />
-								<span class="text-base font-bold">v1.0.0-ALPHA.1</span>
+						<button class="ml-4" class:cursor-pointer={!IS_STABLE} onclick={handleVersionClick}>
+							<div
+								class="badge badge-soft -translate-y-1"
+								class:badge-error={IS_ALPHA}
+								class:badge-warning={IS_BETA}
+								class:badge-info={IS_STABLE}
+							>
+								{#if IS_ALPHA || IS_BETA}
+									<InfoIcon class="size-[1em]" strokeWidth={3} />
+								{/if}
+								<span class="text-base font-bold">v{APP_VERSION}</span>
 							</div>
 						</button>
 					</div>
@@ -52,10 +70,9 @@
 				</Pane>
 				<Pane defaultSize={90}>
 					<PaneGroup direction="horizontal" class="bg-base-100">
-						<Pane defaultSize={25}>
+						<Pane defaultSize={33}>
 							<PaneGroup direction="vertical" class="bg-base-200">
 								<Pane defaultSize={33} class="border-neutral flex flex-col border-t p-8">
-									<h2 class="card-title">Start</h2>
 									<div class="flex flex-1 flex-col justify-center gap-2">
 										<button class="btn btn-block btn-primary" onclick={() => newProjectDialog?.showModal()}>
 											<PackagePlusIcon class="size-5 text-base" />New Project
@@ -65,18 +82,11 @@
 										</button>
 									</div>
 								</Pane>
-								<Pane defaultSize={33} class="border-neutral flex flex-col border-t p-8">
+								<Pane defaultSize={30} class="border-neutral flex flex-col border-t p-8">
 									<h2 class="card-title">Reference</h2>
 									<div class="flex flex-1 flex-col items-start justify-center gap-2">
 										<a href={null}>
 											<LinkIcon class="inline size-4" /> Getting Started
-										</a>
-										<a
-											href="https://docs.yarnspinner.dev/write-yarn-scripts/scripting-fundamentals/lines-nodes-and-options"
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											<LinkIcon class="inline size-4" /> Yarn Spinner Docs
 										</a>
 										<a href="https://www.jujuadams.com/Chatterbox" target="_blank" rel="noopener noreferrer">
 											<LinkIcon class="inline size-4" /> Chatterbox Docs
@@ -93,7 +103,7 @@
 											<BugIcon class="inline size-4" /> Report a Bug
 										</a>
 										<a href={null}>
-											<MessageSquareTextIcon class="inline size-4" /> Yarn Spinner Discord Server
+											<MessageSquareTextIcon class="inline size-4" /> Crochet Support Discord Server
 										</a>
 										<a href={null}>
 											<MessageSquareTextIcon class="inline size-4" /> Chatterbox Discord Server

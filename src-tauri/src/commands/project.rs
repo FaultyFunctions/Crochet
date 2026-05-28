@@ -83,7 +83,7 @@ pub async fn open_project_file(app: tauri::AppHandle) -> Result<Option<String>, 
 }
 
 #[tauri::command]
-pub fn read_yarn_file(path: &str) -> Result<Vec<String>, String> {
+pub fn read_chatter_file(path: &str) -> Result<Vec<String>, String> {
     use std::fs::File;
     use std::io::{BufRead, BufReader};
     let file = File::open(path).map_err(|e| e.to_string())?;

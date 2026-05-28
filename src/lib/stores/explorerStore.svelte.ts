@@ -1,6 +1,5 @@
 // TODO: Make folders stay expanded when renamed
 
-import { ProjectType } from '$lib/stores/projectStore.svelte';
 import { addToast } from '$lib/stores/toastStore.svelte';
 import { CommandHistory, type Command } from '$lib/utils/CommandHistory.svelte';
 import { invoke } from '@tauri-apps/api/core';
@@ -81,9 +80,8 @@ class ExplorerStore {
 		return this.#focused;
 	}
 
-	initialize = async (rootPath: string, projectType: ProjectType): Promise<void> => {
+	initialize = async (rootPath: string): Promise<void> => {
 		this.reset();
-		this.#fileExtension = projectType === ProjectType.CHATTERBOX ? '.chatter' : '.yarn';
 
 		try {
 			// Grab root data from rust

@@ -9,15 +9,9 @@ export enum ProjectState {
 	PROJECT_OPEN = 'PROJECT_OPEN'
 }
 
-export enum ProjectType {
-	CHATTERBOX = 'CHATTERBOX',
-	YARNSPINNER = 'YARNSPINNER'
-}
-
 const InitialConfigSchema = z.object({
 	name: z.string(),
-	path: z.string(),
-	projectType: z.enum(ProjectType)
+	path: z.string()
 });
 type InitialConfig = z.infer<typeof InitialConfigSchema>;
 
@@ -41,7 +35,7 @@ class ProjectStore {
 			});
 
 			this.config = config;
-			await explorerStore.initialize(config.path, config.projectType);
+			await explorerStore.initialize(config.path);
 			this.state = ProjectState.PROJECT_OPEN;
 		} catch (err) {
 			addToast(String(err), 'error');
@@ -56,7 +50,7 @@ class ProjectStore {
 			const config = ProjectConfigSchema.parse(JSON.parse(data));
 
 			this.config = config;
-			await explorerStore.initialize(config.path, config.projectType);
+			await explorerStore.initialize(config.path);
 			this.state = ProjectState.PROJECT_OPEN;
 		} catch (err) {
 			addToast(String(err), 'error');

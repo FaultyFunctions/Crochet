@@ -1,12 +1,10 @@
 use serde::Serialize;
 use std::path::Path;
 
-const ALLOWED_EXTS: &[&str] = &["chatter", "yarn"];
-
 fn is_allowed_file(path: &std::path::Path) -> bool {
     path.extension()
         .and_then(|e| e.to_str())
-        .map(|ext| ALLOWED_EXTS.iter().any(|a| a.eq_ignore_ascii_case(ext)))
+        .map(|ext| ext.eq_ignore_ascii_case("chatter"))
         .unwrap_or(false)
 }
 

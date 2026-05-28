@@ -1,7 +1,7 @@
 <!-- SCRIPT -->
 <script lang="ts">
 	import { invoke } from '@tauri-apps/api/core';
-	import { projectStore, ProjectType as ProjectType } from '$lib/stores/projectStore.svelte';
+	import { projectStore } from '$lib/stores/projectStore.svelte';
 	import { checkProjectNameError } from '$lib/utils/validation';
 	import Toast from '$lib/components/Toast/Toast.svelte';
 
@@ -14,11 +14,10 @@
 	// State
 	let projectName = $state('');
 	let selectedDirectory = $state<string | null>(null);
-	let projectType = $state<ProjectType>(ProjectType.YARNSPINNER);
 
 	// Validation
 	let projectNameError = $derived.by(() => checkProjectNameError(projectName));
-	let canCreate = $derived(projectNameError === null && projectType !== null && selectedDirectory != null);
+	let canCreate = $derived(projectNameError === null && selectedDirectory != null);
 
 	const handleBrowseDirectory = async () => {
 		const directory = await invoke<string | null>('pick_directory');
@@ -32,15 +31,13 @@
 
 		await projectStore.createNewProject({
 			name: projectName,
-			path: selectedDirectory!,
-			projectType: projectType
+			path: selectedDirectory!
 		});
 	};
 
 	const resetForm = () => {
 		projectName = '';
 		selectedDirectory = null;
-		projectType = ProjectType.YARNSPINNER;
 	};
 </script>
 
@@ -80,13 +77,6 @@
 						/>
 						<button type="button" class="btn btn-soft join-item" onclick={handleBrowseDirectory}>Browse</button>
 					</div>
-				</fieldset>
-				<fieldset class="fieldset">
-					<legend class="fieldset-legend">Project Type</legend>
-					<select bind:value={projectType} class="select bg-base-300 w-full appearance-none">
-						<option value={ProjectType.YARNSPINNER}>Yarn Spinner</option>
-						<option value={ProjectType.CHATTERBOX}>Chatterbox</option>
-					</select>
 				</fieldset>
 			</div>
 			<div class="modal-action">
